@@ -1,11 +1,11 @@
 //  Copyright (c) 2015 Neil Pankey. All rights reserved.
 
 /// Singly-linked list of values
-internal final class List<T> {
-    internal let value: T
-    internal var next: List?
+public final class List<T> {
+    public let value: T
+    public var next: List?
 
-    internal init(_ value: T) {
+    public init(_ value: T) {
         self.value = value
     }
 }
@@ -13,7 +13,7 @@ internal final class List<T> {
 extension List : SequenceType {
     typealias Generator = GeneratorOf<List>
 
-    func generate() -> Generator {
+    public func generate() -> Generator {
         var node: List? = self
 
         return Generator {
