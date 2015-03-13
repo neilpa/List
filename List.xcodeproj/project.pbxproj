@@ -10,6 +10,7 @@
 		D820D4C21AB3861D0029E6DD /* List.h in Headers */ = {isa = PBXBuildFile; fileRef = D820D4C11AB3861D0029E6DD /* List.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D820D4CD1AB3861D0029E6DD /* List.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D820D4BC1AB3861D0029E6DD /* List.framework */; };
 		D820D4D41AB3861D0029E6DD /* ListTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D820D4D31AB3861D0029E6DD /* ListTests.swift */; };
+		D820D4DE1AB386C00029E6DD /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = D820D4DD1AB386C00029E6DD /* List.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -29,6 +30,7 @@
 		D820D4CC1AB3861D0029E6DD /* ListTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ListTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D820D4D21AB3861D0029E6DD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D820D4D31AB3861D0029E6DD /* ListTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTests.swift; sourceTree = "<group>"; };
+		D820D4DD1AB386C00029E6DD /* List.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = List.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,6 +74,7 @@
 			isa = PBXGroup;
 			children = (
 				D820D4BF1AB3861D0029E6DD /* Supporting Files */,
+				D820D4DD1AB386C00029E6DD /* List.swift */,
 			);
 			path = List;
 			sourceTree = "<group>";
@@ -209,6 +212,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D820D4DE1AB386C00029E6DD /* List.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -318,6 +322,7 @@
 		D820D4D81AB3861D0029E6DD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -329,12 +334,14 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
 		D820D4D91AB3861D0029E6DD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
