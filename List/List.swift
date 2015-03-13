@@ -8,6 +8,18 @@ public struct List<T> {
     public init() {
     }
 
+    // MARK: Properties
+
+    /// Returns true iff `List` is empty
+    public var isEmpty: Bool {
+        return head == nil
+    }
+
+    /// Returns the `first` value in `List`, `nil` if empty.
+    public var first: T? {
+        return head?.value
+    }
+
     // MARK: Private
 
     /// The type of nodes in `List`
