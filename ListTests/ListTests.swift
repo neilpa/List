@@ -4,4 +4,8 @@ import List
 import XCTest
 import Assertions
 
-final class ListTests: XCTestCase {}
+final class ListTests: XCTestCase {
+
+    func testList() {
+    }
+}

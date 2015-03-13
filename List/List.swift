@@ -1,25 +1,18 @@
 //  Copyright (c) 2015 Neil Pankey. All rights reserved.
 
 /// Singly-linked list of values
-public final class List<T> {
-    public let value: T
-    public var next: List?
+public struct List<T> {
+    // MARK: Constructors
 
-    public init(_ value: T) {
-        self.value = value
+    /// Initializes an empty `List`
+    public init() {
     }
-}
 
-extension List : SequenceType {
-    typealias Generator = GeneratorOf<List>
+    // MARK: Private
 
-    public func generate() -> Generator {
-        var node: List? = self
+    /// The type of nodes in `List`
+    private typealias Node = ListNode<T>
 
-        return Generator {
-            let current = node
-            node = current?.next
-            return current
-        }
-    }
+    /// The `head` of `List`
+    private var head: Node?
 }
