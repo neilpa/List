@@ -11,6 +11,9 @@
 		D820D4CD1AB3861D0029E6DD /* List.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D820D4BC1AB3861D0029E6DD /* List.framework */; };
 		D820D4D41AB3861D0029E6DD /* ListTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D820D4D31AB3861D0029E6DD /* ListTests.swift */; };
 		D820D4DE1AB386C00029E6DD /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = D820D4DD1AB386C00029E6DD /* List.swift */; };
+		D85BF7031AB387E9007E0CA9 /* Assertions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D85BF7021AB387E9007E0CA9 /* Assertions.framework */; };
+		D85BF7041AB3881F007E0CA9 /* Assertions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D85BF7021AB387E9007E0CA9 /* Assertions.framework */; };
+		D85BF7061AB38829007E0CA9 /* Assertions.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = D85BF7021AB387E9007E0CA9 /* Assertions.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -23,6 +26,19 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		D85BF7051AB38823007E0CA9 /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 16;
+			files = (
+				D85BF7061AB38829007E0CA9 /* Assertions.framework in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		D820D4BC1AB3861D0029E6DD /* List.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = List.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D820D4C01AB3861D0029E6DD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -31,6 +47,7 @@
 		D820D4D21AB3861D0029E6DD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D820D4D31AB3861D0029E6DD /* ListTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTests.swift; sourceTree = "<group>"; };
 		D820D4DD1AB386C00029E6DD /* List.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = List.swift; sourceTree = "<group>"; };
+		D85BF7021AB387E9007E0CA9 /* Assertions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Assertions.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -38,6 +55,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D85BF7031AB387E9007E0CA9 /* Assertions.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -46,6 +64,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D820D4CD1AB3861D0029E6DD /* List.framework in Frameworks */,
+				D85BF7041AB3881F007E0CA9 /* Assertions.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -58,6 +77,7 @@
 				D820D4BE1AB3861D0029E6DD /* List */,
 				D820D4D01AB3861D0029E6DD /* ListTests */,
 				D820D4BD1AB3861D0029E6DD /* Products */,
+				D85BF7001AB387E9007E0CA9 /* External */,
 			);
 			sourceTree = "<group>";
 		};
@@ -105,6 +125,23 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		D85BF7001AB387E9007E0CA9 /* External */ = {
+			isa = PBXGroup;
+			children = (
+				D85BF7011AB387E9007E0CA9 /* Mac */,
+			);
+			name = External;
+			path = Carthage/Build;
+			sourceTree = "<group>";
+		};
+		D85BF7011AB387E9007E0CA9 /* Mac */ = {
+			isa = PBXGroup;
+			children = (
+				D85BF7021AB387E9007E0CA9 /* Assertions.framework */,
+			);
+			path = Mac;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
@@ -144,6 +181,7 @@
 				D820D4C81AB3861D0029E6DD /* Sources */,
 				D820D4C91AB3861D0029E6DD /* Frameworks */,
 				D820D4CA1AB3861D0029E6DD /* Resources */,
+				D85BF7051AB38823007E0CA9 /* CopyFiles */,
 			);
 			buildRules = (
 			);
@@ -328,6 +366,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = List/Info.plist;
 				INSTALL_PATH = "@rpath";
@@ -347,6 +389,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
 				FRAMEWORK_VERSION = A;
 				INFOPLIST_FILE = List/Info.plist;
 				INSTALL_PATH = "@rpath";
@@ -363,6 +409,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -382,6 +429,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
 				);
 				INFOPLIST_FILE = ListTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
@@ -408,6 +456,7 @@
 				D820D4D91AB3861D0029E6DD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D820D4DA1AB3861D0029E6DD /* Build configuration list for PBXNativeTarget "ListTests" */ = {
 			isa = XCConfigurationList;
@@ -416,6 +465,7 @@
 				D820D4DC1AB3861D0029E6DD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
