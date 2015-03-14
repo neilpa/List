@@ -8,6 +8,11 @@ public struct List<T> {
     public init() {
     }
 
+    /// Initializes a `List` with a single `value`
+    public init(value: T) {
+        head = Node(value)
+    }
+
     // MARK: Properties
 
     /// Returns true iff `List` is empty
@@ -18,6 +23,13 @@ public struct List<T> {
     /// Returns the `first` value in `List`, `nil` if empty.
     public var first: T? {
         return head?.value
+    }
+
+    /// MARK: Operations
+
+    /// Inserts a new `value` before `head`.
+    public mutating func prepend(value: T) {
+        head = head?.insertBefore(value) ?? Node(value)
     }
 
     // MARK: Private
