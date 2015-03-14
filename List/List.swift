@@ -1,26 +1,26 @@
 //  Copyright (c) 2015 Neil Pankey. All rights reserved.
 
-/// Singly-linked list of values
+/// A singly-linked list of values.
 public struct List<T> {
     // MARK: Constructors
 
-    /// Initializes an empty `List`
+    /// Initializes an empty `List`.
     public init() {
     }
 
-    /// Initializes a `List` with a single `value`
+    /// Initializes a `List` with a single `value`.
     public init(value: T) {
         head = Node(value)
     }
 
-    /// Initializes a `List` with a collection of `values`
+    /// Initializes a `List` with a collection of `values`.
     public init<S: SequenceType where S.Generator.Element == T>(_ values: S) {
         head = Node.create(values)
     }
 
     // MARK: Properties
 
-    /// Returns true iff `List` is empty
+    /// Returns true iff `List` is empty.
     public var isEmpty: Bool {
         return head == nil
     }
@@ -43,17 +43,17 @@ public struct List<T> {
         self.head = head
     }
 
-    /// The type of nodes in `List`
+    /// The type of nodes in `List`.
     private typealias Node = ListNode<T>
 
-    /// The `head` of `List`
+    /// The `head` of `List`.
     private var head: Node?
 }
 
 // MARK: ArrayLiteralConvertible
 
 extension List : ArrayLiteralConvertible {
-    /// Initializes a `List` with the `elements` from array
+    /// Initializes a `List` with the `elements` from array.
     public init(arrayLiteral elements: T...) {
         self.init(elements)
     }
@@ -64,7 +64,7 @@ extension List : ArrayLiteralConvertible {
 extension List : SequenceType {
     public typealias Generator = GeneratorOf<T>
 
-    /// Create a `Generator` that enumerates all the values in `List`
+    /// Create a `Generator` that enumerates all the values in `List`.
     public func generate() -> Generator {
         return head?.values() ?? Generator { nil }
     }
@@ -75,17 +75,17 @@ extension List : SequenceType {
 extension List : CollectionType {
     public typealias Index = ListIndex<T>
 
-    /// Index to the first element of `List`
+    /// Index to the first element of `List`.
     public var startIndex: Index {
         return Index(head)
     }
 
-    /// Index past the last element of `List`
+    /// Index past the last element of `List`.
     public var endIndex: Index {
         return Index(nil)
     }
 
-    /// Returns the element in `List` at `index`
+    /// Returns the element in `List` at `index`.
     public subscript(index: Index) -> T {
         return index.node!.value
     }
@@ -96,7 +96,7 @@ extension List : CollectionType {
 extension List : Sliceable {
     public typealias SubSlice = List
 
-    /// Extract a slice of `List` from bounds
+    /// Extract a slice of `List` from bounds.
     public subscript (bounds: Range<Index>) -> SubSlice {
         // TODO Defer cloning the nodes until modification
         var head = bounds.startIndex.node
@@ -108,17 +108,17 @@ extension List : Sliceable {
 // MARK: Printable
 
 extension List : Printable, DebugPrintable {
-    /// String representation of `List`
+    /// String representation of `List`.
     public var description: String {
         return describe(toString)
     }
 
-    /// Debug string representation of `List`
+    /// Debug string representation of `List`.
     public var debugDescription: String {
         return describe(toDebugString)
     }
 
-    /// Formats elements of list for printing
+    /// Formats elements of list for printing.
     public func describe(stringify: T -> String) -> String {
         let string = join(", ", lazy(self).map(stringify))
         return "[\(string)]"
@@ -127,7 +127,7 @@ extension List : Printable, DebugPrintable {
 
 // MARK: ListIndex
 
-/// Index for a `List`
+/// Index to a value in `List`.
 public struct ListIndex<T> : ForwardIndexType {
     /// Nodes that the `ListIndex` wraps.
     private typealias Node = ListNode<T>

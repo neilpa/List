@@ -12,7 +12,7 @@ public final class ListNode<T> {
     /// Creates a new node list with `values`, or `nil` if empty.
     ///
     /// Ideally this would be a failable initializier but limitations in Swift prevent that
-    /// prevent that on class types - http://stackoverflow.com/a/26497229/1999152
+    /// prevent that on class types - http://stackoverflow.com/a/26497229/1999152.
     public static func create<S: SequenceType where S.Generator.Element == T>(values: S) -> ListNode? {
         var generator = values.generate()
         if let first = generator.next() {
@@ -44,7 +44,7 @@ public final class ListNode<T> {
 
     // MARK: Private
 
-    /// Initializes a new node with `value` and `next`
+    /// Initializes a new node with `value` and `next`.
     private init(_ value: T, _ next: ListNode?) {
         self.value = value
         self.next = next
@@ -64,7 +64,7 @@ public final class ListNode<T> {
 extension ListNode : SequenceType {
     public typealias Generator = GeneratorOf<ListNode>
 
-    /// Create a `Generator` that enumerates all the nodes
+    /// Create a `Generator` that enumerates all the nodes.
     public func generate() -> Generator {
         var node: ListNode? = self
 
@@ -75,7 +75,7 @@ extension ListNode : SequenceType {
         }
     }
 
-    /// Create a `Generator` that enumerates all the values of nodes
+    /// Create a `Generator` that enumerates all the values of nodes.
     public func values() -> GeneratorOf<T> {
         var node: ListNode? = self
 
