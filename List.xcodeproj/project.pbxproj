@@ -11,6 +11,9 @@
 		D820D4CD1AB3861D0029E6DD /* List.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D820D4BC1AB3861D0029E6DD /* List.framework */; };
 		D820D4D41AB3861D0029E6DD /* ListTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D820D4D31AB3861D0029E6DD /* ListTests.swift */; };
 		D820D4DE1AB386C00029E6DD /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = D820D4DD1AB386C00029E6DD /* List.swift */; };
+		D844BA5B1AB4DE5C00888CDB /* Equality.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D844BA5A1AB4DE5C00888CDB /* Equality.framework */; };
+		D844BA5C1AB4DE6A00888CDB /* Equality.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D844BA5A1AB4DE5C00888CDB /* Equality.framework */; };
+		D844BA5D1AB4DE6D00888CDB /* Equality.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = D844BA5A1AB4DE5C00888CDB /* Equality.framework */; };
 		D85BF7031AB387E9007E0CA9 /* Assertions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D85BF7021AB387E9007E0CA9 /* Assertions.framework */; };
 		D85BF7041AB3881F007E0CA9 /* Assertions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D85BF7021AB387E9007E0CA9 /* Assertions.framework */; };
 		D85BF7061AB38829007E0CA9 /* Assertions.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = D85BF7021AB387E9007E0CA9 /* Assertions.framework */; };
@@ -35,6 +38,7 @@
 			dstSubfolderSpec = 16;
 			files = (
 				D85BF7061AB38829007E0CA9 /* Assertions.framework in CopyFiles */,
+				D844BA5D1AB4DE6D00888CDB /* Equality.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -48,6 +52,7 @@
 		D820D4D21AB3861D0029E6DD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D820D4D31AB3861D0029E6DD /* ListTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTests.swift; sourceTree = "<group>"; };
 		D820D4DD1AB386C00029E6DD /* List.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = List.swift; sourceTree = "<group>"; };
+		D844BA5A1AB4DE5C00888CDB /* Equality.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Equality.framework; sourceTree = "<group>"; };
 		D85BF7021AB387E9007E0CA9 /* Assertions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Assertions.framework; sourceTree = "<group>"; };
 		D85BF7071AB3A679007E0CA9 /* ListNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListNode.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -57,6 +62,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D844BA5B1AB4DE5C00888CDB /* Equality.framework in Frameworks */,
 				D85BF7031AB387E9007E0CA9 /* Assertions.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -67,6 +73,7 @@
 			files = (
 				D820D4CD1AB3861D0029E6DD /* List.framework in Frameworks */,
 				D85BF7041AB3881F007E0CA9 /* Assertions.framework in Frameworks */,
+				D844BA5C1AB4DE6A00888CDB /* Equality.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -141,6 +148,7 @@
 			isa = PBXGroup;
 			children = (
 				D85BF7021AB387E9007E0CA9 /* Assertions.framework */,
+				D844BA5A1AB4DE5C00888CDB /* Equality.framework */,
 			);
 			path = Mac;
 			sourceTree = "<group>";

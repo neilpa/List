@@ -1,1 +1,2 @@
 github "antitypical/Assertions" ~> 1.1
+github "neilpa/Equality" ~> 0.1
