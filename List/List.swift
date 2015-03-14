@@ -87,6 +87,26 @@ extension List : CollectionType {
     }
 }
 
+// MARK: Printable
+
+extension List : Printable, DebugPrintable {
+    /// String representation of `List`
+    public var description: String {
+        return describe(toString)
+    }
+
+    /// Debug string representation of `List`
+    public var debugDescription: String {
+        return describe(toDebugString)
+    }
+
+    /// Formats elements of list for printing
+    public func describe(stringify: T -> String) -> String {
+        let string = join(", ", lazy(self).map(stringify))
+        return "[\(string)]"
+    }
+}
+
 // MARK: ListIndex
 
 /// Index for a `List`
