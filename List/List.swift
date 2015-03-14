@@ -39,6 +39,10 @@ public struct List<T> {
 
     // MARK: Private
 
+    private init(_ head: Node?) {
+        self.head = head
+    }
+
     /// The type of nodes in `List`
     private typealias Node = ListNode<T>
 
@@ -84,6 +88,20 @@ extension List : CollectionType {
     /// Returns the element in `List` at `index`
     public subscript(index: Index) -> T {
         return index.node!.value
+    }
+}
+
+// MARK: Sliceable
+
+extension List : Sliceable {
+    public typealias SubSlice = List
+
+    /// Extract a slice of `List` from bounds
+    public subscript (bounds: Range<Index>) -> SubSlice {
+        // TODO Defer cloning the nodes until modification
+        var head = bounds.startIndex.node
+        var tail = bounds.endIndex.node
+        return head == tail ? List() : List(head?.clone(tail))
     }
 }
 

@@ -42,7 +42,7 @@ final class ListTests: XCTestCase {
     }
 
     func testCollectionType() {
-        var list: List<Character> = ["a", "b", "c", "d", "e"]
+        let list: List<Character> = ["a", "b", "c", "d", "e"]
         var index = list.startIndex
         assertEqual(list[index++], "a")
         assertEqual(list[index++], "b")
@@ -52,8 +52,34 @@ final class ListTests: XCTestCase {
         assertEqual(index, list.endIndex)
     }
 
-    func assertEmpty<T>(list: List<T>) {
-        assertEqual(list.isEmpty, true)
-        assertNil(list.first)
+    func testSliceable() {
+        let list: List<Character> = ["a", "b", "c", "d", "e"]
+        let fst = list.startIndex
+        let snd = fst.successor()
+        let thrd = snd.successor()
+        let end = list.endIndex
+
+        assert(list, ==, list[fst..<end])
+
+        assertEmpty(list[fst..<fst])
+        assertEmpty(list[thrd..<thrd])
+        assertEmpty(list[end..<end])
+
+        assert(["a"], ==, list[fst..<snd])
+        assert(["a"], ==, list[fst...fst])
+
+        assert(["b"], ==, list[snd..<thrd])
+        assert(["b"], ==, list[snd...snd])
+
+        assert(["a", "b",], ==, list[fst..<thrd])
+        assert(["b", "c",], ==, list[fst.successor()..<thrd.successor()])
+
+        assert(["c", "d", "e"], ==, list[thrd..<end])
+        assert(["c", "d"], ==, list[thrd...thrd.successor()])
+    }
+
+    func assertEmpty<T>(list: List<T>, file: String = __FILE__, line: UInt = __LINE__) {
+        assertEqual(list.isEmpty, true, "", file, line)
+        assertNil(list.first, "", file: file, line: line)
     }
 }

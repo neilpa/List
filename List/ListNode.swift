@@ -92,9 +92,9 @@ extension ListNode : SequenceType {
 // MARK: Copying
 
 extension ListNode {
-    /// Recursively creates a copy of `ListNode`s returning the new head.
-    public func clone() -> ListNode {
-        return ListNode(value, next?.clone())
+    /// Recursively creates a copy of `ListNode`s until `tail` returning the new head.
+    public func clone(tail: ListNode?) -> ListNode {
+        return ListNode(value, next != tail ? next?.clone(tail) : nil)
     }
 }
 
