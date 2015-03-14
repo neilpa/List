@@ -30,11 +30,6 @@ public final class ListNode<T> {
         return next!
     }
 
-    /// Recursively creates a copy of `ListNode`s returning the new head.
-    public func clone() -> ListNode {
-        return ListNode(value, next?.clone())
-    }
-
     // MARK: Private
 
     /// Initializes a new node with `value` and `next`
@@ -42,13 +37,12 @@ public final class ListNode<T> {
         self.value = value
         self.next = next
     }
-
 }
 
 // MARK: SequenceType
 
 extension ListNode : SequenceType {
-    typealias Generator = GeneratorOf<ListNode>
+    public typealias Generator = GeneratorOf<ListNode>
 
     /// Create a `Generator` that enumerates all the nodes
     public func generate() -> Generator {
@@ -60,9 +54,29 @@ extension ListNode : SequenceType {
             return current
         }
     }
+
+    /// Create a `Generator` that enumerates all the values of nodes
+    public func values() -> GeneratorOf<T> {
+        var node: ListNode? = self
+
+        return GeneratorOf<T> {
+            if let value = node?.value {
+                node = node?.next
+                return value
+            }
+            return nil
+        }
+    }
 }
 
 // MARK: Copying
+
+extension ListNode {
+    /// Recursively creates a copy of `ListNode`s returning the new head.
+    public func clone() -> ListNode {
+        return ListNode(value, next?.clone())
+    }
+}
 
 /// Recursively creates a copy of `ListNode`s returning the new head and tail.
 public func clone<T>(node: ListNode<T>) -> (ListNode<T>, ListNode<T>) {

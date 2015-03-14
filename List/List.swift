@@ -28,3 +28,14 @@ public struct List<T> {
     /// The `head` of `List`
     private var head: Node?
 }
+
+// MARK: SequenceType
+
+extension List : SequenceType {
+    public typealias Generator = GeneratorOf<T>
+
+    /// Create a `Generator` that enumerates all the values in `List`
+    public func generate() -> Generator {
+        return head?.values() ?? Generator { nil }
+    }
+}
