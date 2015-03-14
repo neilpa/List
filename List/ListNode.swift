@@ -92,3 +92,13 @@ private func clone<T>(head: ListNode<T>, tail: ListNode<T>, original: ListNode<T
     }
     return (head, tail)
 }
+
+// MARK: Equality
+
+extension ListNode : Equatable {
+}
+
+/// Determines if two nodes are equal via identity
+public func == <T> (lhs: ListNode<T>, rhs: ListNode<T>) -> Bool {
+    return lhs === rhs
+}

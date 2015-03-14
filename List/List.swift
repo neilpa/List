@@ -39,3 +39,47 @@ extension List : SequenceType {
         return head?.values() ?? Generator { nil }
     }
 }
+
+// MARK: CollectionType
+
+extension List : CollectionType {
+    public typealias Index = ListIndex<T>
+
+    public var startIndex: Index {
+        return Index(head)
+    }
+
+    public var endIndex: Index {
+        return Index(nil)
+    }
+
+    public subscript(index: Index) -> T {
+        return head!.value
+    }
+}
+
+// MARK: ListIndex
+
+/// Index for a `List`
+public struct ListIndex<T> : ForwardIndexType {
+    /// Nodes that the `ListIndex` wraps.
+    private typealias Node = ListNode<T>
+
+    /// Current `node` that `ListIndex` points at.
+    private let node: Node?
+
+    /// Create an index pointing to `node`.
+    private init(_ node: Node?) {
+        self.node = node
+    }
+
+    /// Returns the next `ListIndex`.
+    public func successor() -> ListIndex {
+        return ListIndex(node!.next)
+    }
+}
+
+/// Determines if two indexes are equal.
+public func == <T> (lhs: ListIndex<T>, rhs: ListIndex<T>) -> Bool {
+    return lhs.node == rhs.node
+}
