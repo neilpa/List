@@ -41,6 +41,17 @@ final class ListTests: XCTestCase {
         assert(list, ==, [1, 2, 3])
     }
 
+    func testCollectionType() {
+        var list: List<Character> = ["a", "b", "c", "d", "e"]
+        var index = list.startIndex
+        assertEqual(list[index++], "a")
+        assertEqual(list[index++], "b")
+        assertEqual(list[index++], "c")
+        assertEqual(list[index++], "d")
+        assertEqual(list[index++], "e")
+        assertEqual(index, list.endIndex)
+    }
+
     func assertEmpty<T>(list: List<T>) {
         assertEqual(list.isEmpty, true)
         assertNil(list.first)
