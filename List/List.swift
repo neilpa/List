@@ -57,16 +57,19 @@ extension List : SequenceType {
 extension List : CollectionType {
     public typealias Index = ListIndex<T>
 
+    /// Index to the first element of `List`
     public var startIndex: Index {
         return Index(head)
     }
 
+    /// Index past the last element of `List`
     public var endIndex: Index {
         return Index(nil)
     }
 
+    /// Returns the element in `List` at `index`
     public subscript(index: Index) -> T {
-        return head!.value
+        return index.node!.value
     }
 }
 
