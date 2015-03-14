@@ -30,6 +30,17 @@ final class ListTests: XCTestCase {
         assert(list, ==, [3, 2, 1])
     }
 
+    func testArrayLiteralConvertible() {
+        var list: List<Int> = []
+        assertEmpty(list)
+
+        list = [42]
+        assert(list, ==, [42])
+
+        list = [1, 2, 3]
+        assert(list, ==, [1, 2, 3])
+    }
+
     func assertEmpty<T>(list: List<T>) {
         assertEqual(list.isEmpty, true)
         assertNil(list.first)

@@ -9,6 +9,18 @@ public final class ListNode<T> {
         self.init(value, nil)
     }
 
+    /// Creates a new node list with `values`, or `nil` if empty.
+    ///
+    /// Ideally this would be a failable initializier but limitations in Swift prevent that
+    /// prevent that on class types - http://stackoverflow.com/a/26497229/1999152
+    public static func create<S: SequenceType where S.Generator.Element == T>(values: S) -> ListNode? {
+        var generator = values.generate()
+        if let first = generator.next() {
+            return ListNode(first, generator)
+        }
+        return nil
+    }
+
     // MARK: Properties
 
     /// The `value` at the this node.
@@ -36,6 +48,14 @@ public final class ListNode<T> {
     private init(_ value: T, _ next: ListNode?) {
         self.value = value
         self.next = next
+    }
+
+    /// Initializes a node list with `value` and consumes `generator` to append elements.
+    private init<G: GeneratorType where G.Element == T>(_ value: T, var _ generator: G) {
+        self.value = value
+        if let tail = generator.next() {
+            next = ListNode(tail, generator)
+        }
     }
 }
 
@@ -98,7 +118,7 @@ private func clone<T>(head: ListNode<T>, tail: ListNode<T>, original: ListNode<T
 extension ListNode : Equatable {
 }
 
-/// Determines if two nodes are equal via identity
+/// Determines if two nodes are equal via identity.
 public func == <T> (lhs: ListNode<T>, rhs: ListNode<T>) -> Bool {
     return lhs === rhs
 }

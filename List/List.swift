@@ -13,6 +13,11 @@ public struct List<T> {
         head = Node(value)
     }
 
+    /// Initializes a `List` with a collection of `values`
+    public init<S: SequenceType where S.Generator.Element == T>(_ values: S) {
+        head = Node.create(values)
+    }
+
     // MARK: Properties
 
     /// Returns true iff `List` is empty
@@ -39,6 +44,15 @@ public struct List<T> {
 
     /// The `head` of `List`
     private var head: Node?
+}
+
+// MARK: ArrayLiteralConvertible
+
+extension List : ArrayLiteralConvertible {
+    /// Initializes a `List` with the `elements` from array
+    public init(arrayLiteral elements: T...) {
+        self.init(elements)
+    }
 }
 
 // MARK: SequenceType
