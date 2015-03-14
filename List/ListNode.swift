@@ -30,6 +30,11 @@ public final class ListNode<T> {
         return next!
     }
 
+    /// Recursively creates a copy of `ListNode`s returning the new head.
+    public func clone() -> ListNode {
+        return ListNode(value, next?.clone())
+    }
+
     // MARK: Private
 
     /// Initializes a new node with `value` and `next`
@@ -55,4 +60,21 @@ extension ListNode : SequenceType {
             return current
         }
     }
+}
+
+// MARK: Copying
+
+/// Recursively creates a copy of `ListNode`s returning the new head and tail.
+public func clone<T>(node: ListNode<T>) -> (ListNode<T>, ListNode<T>) {
+    let head = ListNode(node.value)
+    return clone(head, head, node)
+}
+
+/// Recursively creates a copy of `ListNode`s returning the new head and tail.
+private func clone<T>(head: ListNode<T>, tail: ListNode<T>, original: ListNode<T>) -> (ListNode<T>, ListNode<T>) {
+    if let next = original.next {
+        tail.next = ListNode(next.value)
+        return clone(head, tail.next!, next)
+    }
+    return (head, tail)
 }
