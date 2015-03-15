@@ -10,12 +10,13 @@ public struct List<T> {
 
     /// Initializes a `List` with a single `value`.
     public init(value: T) {
-        head = Node(value)
+        self.init(Node(value))
     }
 
     /// Initializes a `List` with a collection of `values`.
     public init<S: SequenceType where S.Generator.Element == T>(_ values: S) {
-        head = Node.create(values)
+        // TODO This should return the tail of the list as well so we don't rely on `last`
+        self.init(Node.create(values))
     }
 
     // MARK: Properties
@@ -57,8 +58,15 @@ public struct List<T> {
 
     // MARK: Private
 
+    /// Initializes `List` with `head`.
     private init(_ head: Node?) {
+        self.init(head, head?.last)
+    }
+
+    /// Initializes `List` with `head` and `tail`
+    private init(_ head: Node?, _ tail: Node?) {
         self.head = head
+        self.tail = tail
     }
 
     /// The type of nodes in `List`.

@@ -29,6 +29,11 @@ public final class ListNode<T> {
     /// The remainder of the list.
     public var next: ListNode?
 
+    /// The `last` node in the list. This is O(n) since it walks the entire list.
+    public var last: ListNode {
+        return next?.last ?? self
+    }
+
     /// MARK: Operations
 
     /// Prefixes the receiver with a new value returning the created `ListNode`.
