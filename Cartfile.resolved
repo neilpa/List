@@ -1,2 +1,3 @@
 github "antitypical/Assertions" "v1.1-beta.1"
+github "neilpa/Dumpster" "6b29d21e085bc174cdb16767d6d4a611bf05c149"
 github "neilpa/Equality" "0.1.1"

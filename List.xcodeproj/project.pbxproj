@@ -18,6 +18,9 @@
 		D85BF7041AB3881F007E0CA9 /* Assertions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D85BF7021AB387E9007E0CA9 /* Assertions.framework */; };
 		D85BF7061AB38829007E0CA9 /* Assertions.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = D85BF7021AB387E9007E0CA9 /* Assertions.framework */; };
 		D85BF7081AB3A679007E0CA9 /* ListNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = D85BF7071AB3A679007E0CA9 /* ListNode.swift */; };
+		D8B47D2F1AB52A5700F4DAD2 /* Dumpster.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8B47D2E1AB52A5700F4DAD2 /* Dumpster.framework */; };
+		D8B47D301AB52C8200F4DAD2 /* Dumpster.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D8B47D2E1AB52A5700F4DAD2 /* Dumpster.framework */; };
+		D8B47D311AB52C8700F4DAD2 /* Dumpster.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = D8B47D2E1AB52A5700F4DAD2 /* Dumpster.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -38,6 +41,7 @@
 			dstSubfolderSpec = 16;
 			files = (
 				D85BF7061AB38829007E0CA9 /* Assertions.framework in CopyFiles */,
+				D8B47D311AB52C8700F4DAD2 /* Dumpster.framework in CopyFiles */,
 				D844BA5D1AB4DE6D00888CDB /* Equality.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -55,6 +59,7 @@
 		D844BA5A1AB4DE5C00888CDB /* Equality.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Equality.framework; sourceTree = "<group>"; };
 		D85BF7021AB387E9007E0CA9 /* Assertions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Assertions.framework; sourceTree = "<group>"; };
 		D85BF7071AB3A679007E0CA9 /* ListNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListNode.swift; sourceTree = "<group>"; };
+		D8B47D2E1AB52A5700F4DAD2 /* Dumpster.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Dumpster.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +67,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D8B47D2F1AB52A5700F4DAD2 /* Dumpster.framework in Frameworks */,
 				D844BA5B1AB4DE5C00888CDB /* Equality.framework in Frameworks */,
 				D85BF7031AB387E9007E0CA9 /* Assertions.framework in Frameworks */,
 			);
@@ -73,6 +79,7 @@
 			files = (
 				D820D4CD1AB3861D0029E6DD /* List.framework in Frameworks */,
 				D85BF7041AB3881F007E0CA9 /* Assertions.framework in Frameworks */,
+				D8B47D301AB52C8200F4DAD2 /* Dumpster.framework in Frameworks */,
 				D844BA5C1AB4DE6A00888CDB /* Equality.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -148,6 +155,7 @@
 			isa = PBXGroup;
 			children = (
 				D85BF7021AB387E9007E0CA9 /* Assertions.framework */,
+				D8B47D2E1AB52A5700F4DAD2 /* Dumpster.framework */,
 				D844BA5A1AB4DE5C00888CDB /* Equality.framework */,
 			);
 			path = Mac;
