@@ -1,1 +1,1 @@
-github "neilpa/Dumpster" "master"
+github "neilpa/Dumpster" ~> 0.1
