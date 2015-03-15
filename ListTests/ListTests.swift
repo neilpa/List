@@ -13,12 +13,6 @@ final class ListTests: XCTestCase {
         assertEmpty(List<Int>())
     }
 
-    func testSingleConstruction() {
-        assert(List(value: 42), ==, [42])
-        assert(List(value: false), ==, [false])
-        assert(List(value: "hi"), ==, ["hi"])
-    }
-
     func testPrepend() {
         var list: List<Int> = List()
 
@@ -41,6 +35,19 @@ final class ListTests: XCTestCase {
         assert(list, ==, [1, 2, 3])
     }
 
+    func testSingleConstruction() {
+        assert(List(value: 42), ==, [42])
+        assert(List(value: false), ==, [false])
+        assert(List(value: "hi"), ==, ["hi"])
+
+        var list = List(value: 1)
+        list.append(2)
+        assert(list, ==, [1, 2])
+
+        list.prepend(3)
+        assert(list, ==, [3, 1, 2])
+    }
+
     func testArrayLiteralConvertible() {
         var list: List<Int> = []
         assertEmpty(list)
@@ -50,6 +57,12 @@ final class ListTests: XCTestCase {
 
         list = [1, 2, 3]
         assert(list, ==, [1, 2, 3])
+
+        list.prepend(0)
+        assert(list, ==, [0, 1, 2, 3])
+
+        list.append(4)
+        assert(list, ==, [0, 1, 2, 3, 4])
     }
 
     func testCollectionType() {
@@ -87,6 +100,28 @@ final class ListTests: XCTestCase {
 
         assert(["c", "d", "e"], ==, list[thrd..<end])
         assert(["c", "d"], ==, list[thrd...thrd.successor()])
+    }
+
+    func testSliceMutations() {
+        var list: List<Int> = [1, 2, 3, 4]
+        let index = list.startIndex.successor()
+        var slice = list[index...index.successor()]
+
+        list.prepend(0)
+        assert([2, 3], ==, slice)
+        assert([0, 1, 2, 3, 4], ==, list)
+
+        list.append(5)
+        assert([2, 3], ==, slice)
+        assert([0, 1, 2, 3, 4, 5], ==, list)
+
+        slice.append(6)
+        assert([2, 3, 6], ==, slice)
+        assert([0, 1, 2, 3, 4, 5], ==, list)
+
+        slice.prepend(-1)
+        assert([-1, 2, 3, 6], ==, slice)
+        assert([0, 1, 2, 3, 4, 5], ==, list)
     }
 
     func assertEmpty<T>(list: List<T>, file: String = __FILE__, line: UInt = __LINE__) {
