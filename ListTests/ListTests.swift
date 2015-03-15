@@ -124,6 +124,15 @@ final class ListTests: XCTestCase {
         assert([0, 1, 2, 3, 4, 5], ==, list)
     }
 
+    func testExtensibleCollectionType() {
+        var list: List<Int> = []
+        list.extend([])
+        assertEmpty(list)
+
+        list.extend([4, 5, 6])
+        assert([4, 5, 6], ==, list)
+    }
+
     func assertEmpty<T>(list: List<T>, file: String = __FILE__, line: UInt = __LINE__) {
         assertEqual(list.isEmpty, true, "", file, line)
         assertNil(list.first, "", file: file, line: line)

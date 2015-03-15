@@ -134,6 +134,19 @@ extension List : Sliceable {
     }
 }
 
+// MARK: ExtensibleCollectionType
+
+extension List : ExtensibleCollectionType {
+    /// Does nothing.
+    public mutating func reserveCapacity(amount: Index.Distance) {
+    }
+
+    /// Appends multiple elements to the end of `Queue`
+    public mutating func extend<S: SequenceType where S.Generator.Element == T>(values: S) {
+        map(values) { self.append($0) }
+    }
+}
+
 // MARK: Printable
 
 extension List : Printable, DebugPrintable {
