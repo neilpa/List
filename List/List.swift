@@ -25,16 +25,34 @@ public struct List<T> {
         return head == nil
     }
 
-    /// Returns the `first` value in `List`, `nil` if empty.
+    /// Returns the value at the head of `List`, `nil` if empty.
     public var first: T? {
         return head?.value
     }
 
+    /// Returns the value at the tail of `List`, `nil` if empty.
+    public var last: T? {
+        return tail?.value
+    }
+
     /// MARK: Operations
 
-    /// Inserts a new `value` before `head`.
+    /// Inserts a new `value` before the `first` value
     public mutating func prepend(value: T) {
-        head = head?.insertBefore(value) ?? Node(value)
+        head = head?.insertBefore(value)
+        if head == nil {
+            head = Node(value)
+            tail = head
+        }
+    }
+
+    /// Inserts a new `value` after the `last` value
+    public mutating func append(value: T) {
+        tail = tail?.insertAfter(value)
+        if tail == nil {
+            tail = Node(value)
+            head = tail
+        }
     }
 
     // MARK: Private
@@ -46,8 +64,11 @@ public struct List<T> {
     /// The type of nodes in `List`.
     private typealias Node = ListNode<T>
 
-    /// The `head` of `List`.
+    /// The first node of `List`.
     private var head: Node?
+
+    /// The last node of `List`.
+    private var tail: Node?
 }
 
 // MARK: ArrayLiteralConvertible

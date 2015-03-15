@@ -37,7 +37,7 @@ public final class ListNode<T> {
     }
 
     /// Replaces `next` of the receiver with a new value returning the created `ListNode` which points at the replaced `next`.
-    public func insertAfter() -> ListNode {
+    public func insertAfter(value: T) -> ListNode {
         next = ListNode(value, next)
         return next!
     }
