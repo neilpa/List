@@ -1,5 +1,7 @@
 //  Copyright (c) 2015 Neil Pankey. All rights reserved.
 
+import Dumpster
+
 /// A singly-linked list of values.
 public struct List<T> {
     // MARK: Constructors
@@ -15,7 +17,7 @@ public struct List<T> {
 
     /// Initializes a `List` with a collection of `values`.
     public init<S: SequenceType where S.Generator.Element == T>(_ values: S) {
-        // TODO This should return the tail of the list as well so we don't rely on `last`
+        // TODO This should return the tail of the list as well so we don't rely on `head.last`
         self.init(Node.create(values))
     }
 
@@ -38,7 +40,7 @@ public struct List<T> {
 
     /// MARK: Operations
 
-    /// Inserts a new `value` before the `first` value
+    /// Inserts a new `value` before the `first` value.
     public mutating func prepend(value: T) {
         head = head?.insertBefore(value)
         if head == nil {
@@ -47,7 +49,7 @@ public struct List<T> {
         }
     }
 
-    /// Inserts a new `value` after the `last` value
+    /// Inserts a new `value` after the `last` value.
     public mutating func append(value: T) {
         tail = tail?.insertAfter(value)
         if tail == nil {
@@ -77,6 +79,34 @@ public struct List<T> {
 
     /// The last node of `List`.
     private var tail: Node?
+}
+
+// MARK: Queue/Stack
+
+extension List : QueueType, StackType {
+    public typealias Element = T
+
+    /// Removes the `first` value at the head of `List` and returns it, `nil` if empty.
+    public mutating func popFirst() -> T? {
+        let value = head?.value
+        if head == tail {
+            head = nil
+            tail = nil
+        } else {
+            head = head?.next
+        }
+        return value
+    }
+
+    /// Inserts a new `value` before the `first` value.
+    public mutating func pushFirst(value: T) {
+        prepend(value)
+    }
+
+    /// Inserts a new `value` after the `last` value.
+    public mutating func pushLast(value: T) {
+        append(value)
+    }
 }
 
 // MARK: ArrayLiteralConvertible

@@ -133,6 +133,22 @@ final class ListTests: XCTestCase {
         assert([4, 5, 6], ==, list)
     }
 
+    func testPopFirst() {
+        var list: List<Int> = [1, 2]
+
+        assertEqual(list.popFirst(), 1)
+        assert(list, ==, [2])
+
+        assertEqual(list.popFirst(), 2)
+        assertEmpty(list)
+
+        list.pushLast(42)
+        assert(list, ==, [42])
+
+        assertEqual(list.popFirst(), 42)
+        assertEmpty(list)
+    }
+
     func assertEmpty<T>(list: List<T>, file: String = __FILE__, line: UInt = __LINE__) {
         assertEqual(list.isEmpty, true, "", file, line)
         assertNil(list.first, "", file: file, line: line)
