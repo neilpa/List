@@ -76,6 +76,14 @@ final class ListTests: XCTestCase {
         assertEqual(index, list.endIndex)
     }
 
+    func testMutableCollectionType() {
+        var list: List<String> = ["a", "b", "c", "d", "e"]
+        for index in list.startIndex..<list.endIndex {
+            list[index] = list[index].uppercaseString
+        }
+        assert(list, ==, ["A", "B", "C", "D", "E"])
+    }
+
     func testSliceable() {
         let list: List<Character> = ["a", "b", "c", "d", "e"]
         let fst = list.startIndex
@@ -124,6 +132,22 @@ final class ListTests: XCTestCase {
         assert([0, 1, 2, 3, 4, 5], ==, list)
     }
 
+    func testMutableSlice() {
+        var list: List<Int> = [1, 2, 3, 4]
+
+        list[list.startIndex...list.startIndex] = List<Int>([9, 8])
+        assert(list, ==, [9, 8, 2, 3, 4])
+
+        list[list.endIndex..<list.endIndex] = List<Int>(value: 5)
+        assert(list, ==, [9, 8, 2, 3, 4, 5])
+
+        list[list.startIndex.successor()..<advance(list.startIndex, 3)] = List<Int>([6, 6, 6])
+        assert(list, ==, [9, 6, 6, 6, 3, 4, 5])
+
+        list[list.startIndex..<list.endIndex] = List<Int>()
+        assertEmpty(list)
+    }
+
     func testExtensibleCollectionType() {
         var list: List<Int> = []
         list.extend([])
@@ -131,6 +155,46 @@ final class ListTests: XCTestCase {
 
         list.extend([4, 5, 6])
         assert([4, 5, 6], ==, list)
+    }
+
+    func testRangeReplaceableCollectionType() {
+        var list: List<Int> = []
+
+        list.insert(1, atIndex: list.startIndex)
+        assert(list, ==, [1])
+
+        list.splice([2, 3], atIndex: list.endIndex)
+        assert(list, ==, [1, 2, 3])
+
+        list.removeAtIndex(list.startIndex)
+        assert(list, ==, [2, 3])
+
+        list.insert(1, atIndex: list.startIndex)
+        assert(list, ==, [1, 2, 3])
+
+        list.removeRange(advance(list.startIndex, 1)..<advance(list.startIndex, 2))
+        assert(list, ==, [1, 3])
+
+        list.removeRange(list.startIndex.successor()..<list.endIndex)
+        assert(list, ==, [1])
+
+        list.removeRange(list.startIndex..<list.startIndex.successor())
+        assertEmpty(list)
+
+        list.splice([1, 2, 3, 4, 5, 6], atIndex: list.endIndex)
+        assert(list, ==, [1, 2, 3, 4, 5, 6])
+
+        list.replaceRange(list.startIndex.successor()..<advance(list.startIndex, 5), with: [3])
+        assert(list, ==, [1, 3, 6])
+
+        list.replaceRange(list.startIndex..<list.endIndex, with: [3, 2, 1, 0])
+        assert(list, ==, [3, 2, 1, 0])
+
+        list.replaceRange(advance(list.startIndex, 3)..<list.endIndex, with: [1, 2, 3])
+        assert(list, ==, [3, 2, 1, 1, 2, 3])
+
+        list.removeAll(keepCapacity: false)
+        assertEmpty(list)
     }
 
     func testPopFirst() {
