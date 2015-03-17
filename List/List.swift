@@ -129,9 +129,9 @@ extension List : SequenceType {
     }
 }
 
-// MARK: CollectionType
+// MARK: CollectionType, MutableCollectionType
 
-extension List : CollectionType {
+extension List : CollectionType, MutableCollectionType {
     public typealias Index = ListIndex<T>
 
     /// Index to the first element of `List`.
@@ -144,9 +144,13 @@ extension List : CollectionType {
         return Index(nil)
     }
 
-    /// Returns the element in `List` at `index`.
+    /// Retrieves or updates the element in `List` at `index`.
     public subscript(index: Index) -> T {
-        return index.node!.value
+        get {
+            return index.node!.value
+        } set {
+            index.node!.value = newValue
+        }
     }
 }
 

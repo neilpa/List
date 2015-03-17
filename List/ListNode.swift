@@ -24,7 +24,7 @@ public final class ListNode<T> {
     // MARK: Properties
 
     /// The `value` at the this node.
-    public let value: T
+    public var value: T
 
     /// The remainder of the list.
     public var next: ListNode?

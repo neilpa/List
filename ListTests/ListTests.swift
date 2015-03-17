@@ -76,6 +76,14 @@ final class ListTests: XCTestCase {
         assertEqual(index, list.endIndex)
     }
 
+    func testMutableCollectionType() {
+        var list: List<String> = ["a", "b", "c", "d", "e"]
+        for index in list.startIndex..<list.endIndex {
+            list[index] = list[index].uppercaseString
+        }
+        assert(list, ==, ["A", "B", "C", "D", "E"])
+    }
+
     func testSliceable() {
         let list: List<Character> = ["a", "b", "c", "d", "e"]
         let fst = list.startIndex
