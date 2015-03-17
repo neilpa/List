@@ -141,6 +141,10 @@ final class ListTests: XCTestCase {
         assert([4, 5, 6], ==, list)
     }
 
+    func testRangeReplaceableCollectionType() {
+        // TODO
+    }
+
     func testPopFirst() {
         var list: List<Int> = [1, 2]
 

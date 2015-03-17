@@ -181,6 +181,40 @@ extension List : ExtensibleCollectionType {
     }
 }
 
+// MARK: RangeReplaceableCollectionType
+
+extension List : RangeReplaceableCollectionType {
+    /// Replace the given `subRange` of elements with `newElements`.
+    public mutating func replaceRange<C : CollectionType where C.Generator.Element == T>(subRange: Range<Index>, with elements: C) {
+        // TODO
+    }
+
+    /// Insert `newElement` at index `i`.
+    public mutating func insert(newElement: T, atIndex i: Index) {
+        Swift.insert(&self, newElement, atIndex: i)
+    }
+
+    /// Insert `newElements` at index `i`
+    public mutating func splice<C : CollectionType where C.Generator.Element == T>(newElements: C, atIndex i: Index) {
+        Swift.splice(&self, newElements, atIndex: i)
+    }
+
+    /// Remove the element at index `i`
+    public mutating func removeAtIndex(i: Index) -> T {
+        return Swift.removeAtIndex(&self, i)
+    }
+
+    /// Remove the indicated `subRange` of elements
+    public mutating func removeRange(subRange: Range<Index>) {
+        return Swift.removeRange(&self, subRange)
+    }
+
+    /// Remove all elements
+    public mutating func removeAll(#keepCapacity: Bool) {
+        return Swift.removeAll(&self, keepCapacity: keepCapacity)
+    }
+}
+
 // MARK: Printable
 
 extension List : Printable, DebugPrintable {
