@@ -42,20 +42,12 @@ public struct List<T> {
 
     /// Inserts a new `value` before the `first` value.
     public mutating func prepend(value: T) {
-        head = head?.insertBefore(value)
-        if head == nil {
-            head = Node(value)
-            tail = head
-        }
+        insert(value, atIndex: startIndex)
     }
 
     /// Inserts a new `value` after the `last` value.
     public mutating func append(value: T) {
-        tail = tail?.insertAfter(value)
-        if tail == nil {
-            tail = Node(value)
-            head = tail
-        }
+        insert(value, atIndex: endIndex)
     }
 
     // MARK: Private
@@ -107,12 +99,7 @@ extension List : QueueType, StackType {
     /// Removes the `first` value at the head of `List` and returns it, `nil` if empty.
     public mutating func popFirst() -> T? {
         let value = head?.value
-        if head == tail {
-            head = nil
-            tail = nil
-        } else {
-            head = head?.next
-        }
+        self.removeAtIndex(startIndex)
         return value
     }
 
