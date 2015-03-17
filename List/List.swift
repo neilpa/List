@@ -141,7 +141,7 @@ extension List : CollectionType, MutableCollectionType {
 
     /// Index past the last element of `List`.
     public var endIndex: Index {
-        return Index(nil)
+        return Index(nil, tail)
     }
 
     /// Retrieves or updates the element in `List` at `index`.
@@ -186,8 +186,27 @@ extension List : ExtensibleCollectionType {
 extension List : RangeReplaceableCollectionType {
     /// Replace the given `subRange` of elements with `newElements`.
     public mutating func replaceRange<C : CollectionType where C.Generator.Element == T>(subRange: Range<Index>, with elements: C) {
-        // TODO
+        var replacementHead = Node.create(elements)
+        var replacementTail = replacementHead?.last
+
+        var prefixTail = subRange.startIndex.previous
+        var suffixHead = subRange.endIndex.node
+
+        if prefixTail == nil {
+            head = replacementHead ?? suffixHead
+        } else {
+            prefixTail?.next = replacementHead ?? suffixHead
+        }
+
+        if suffixHead == nil {
+            tail = replacementTail
+        } else {
+            replacementTail?.next = suffixHead
+        }
     }
+
+    // The remaining methods rely on the Swift stdlib equivalent which are implemented
+    // in terms of `rangeReplace`
 
     /// Insert `newElement` at index `i`.
     public mutating func insert(newElement: T, atIndex i: Index) {
@@ -245,14 +264,25 @@ public struct ListIndex<T> : ForwardIndexType {
     /// Current `node` that `ListIndex` points at.
     private let node: Node?
 
+    /// The node before `node`, enables RangeRepleaceableCollectionType
+    private let previous: Node?
+
     /// Create an index pointing to `node`.
     private init(_ node: Node?) {
+        self.init(node, nil)
+    }
+
+    /// Create an index pointing to `node` which follows `previous`.
+    private init(_ node: Node?, _ previous: Node?) {
+        precondition(previous?.next == node || previous == nil)
+
         self.node = node
+        self.previous = previous
     }
 
     /// Returns the next `ListIndex`.
     public func successor() -> ListIndex {
-        return ListIndex(node!.next)
+        return ListIndex(node!.next, node)
     }
 }
 

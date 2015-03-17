@@ -142,7 +142,29 @@ final class ListTests: XCTestCase {
     }
 
     func testRangeReplaceableCollectionType() {
-        // TODO
+        var list: List<Int> = []
+
+        list.insert(1, atIndex: list.startIndex)
+        assert(list, ==, [1])
+
+        list.splice([2, 3], atIndex: list.endIndex)
+        assert(list, ==, [1, 2, 3])
+
+        list.removeAtIndex(list.startIndex)
+        assert(list, ==, [2, 3])
+
+        list.removeAll(keepCapacity: false)
+        assertEmpty(list)
+
+        list = [1, 2, 3, 4, 5, 6]
+        list.replaceRange(list.startIndex.successor()..<advance(list.startIndex, 5), with: [3])
+        assert(list, ==, [1, 3, 6])
+
+        list.replaceRange(list.startIndex..<list.endIndex, with: [3, 2, 1, 0])
+        assert(list, ==, [3, 2, 1, 0])
+
+        list.replaceRange(advance(list.startIndex, 3)..<list.endIndex, with: [1, 2, 3])
+        assert(list, ==, [3, 2, 1, 1, 2, 3])
     }
 
     func testPopFirst() {
