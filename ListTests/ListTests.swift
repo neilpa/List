@@ -132,6 +132,22 @@ final class ListTests: XCTestCase {
         assert([0, 1, 2, 3, 4, 5], ==, list)
     }
 
+    func testMutableSlice() {
+        var list: List<Int> = [1, 2, 3, 4]
+
+        list[list.startIndex...list.startIndex] = List<Int>([9, 8])
+        assert(list, ==, [9, 8, 2, 3, 4])
+
+        list[list.endIndex..<list.endIndex] = List<Int>(value: 5)
+        assert(list, ==, [9, 8, 2, 3, 4, 5])
+
+        list[list.startIndex.successor()..<advance(list.startIndex, 3)] = List<Int>([6, 6, 6])
+        assert(list, ==, [9, 6, 6, 6, 3, 4, 5])
+
+        list[list.startIndex..<list.endIndex] = List<Int>()
+        assertEmpty(list)
+    }
+
     func testExtensibleCollectionType() {
         var list: List<Int> = []
         list.extend([])
@@ -153,10 +169,15 @@ final class ListTests: XCTestCase {
         list.removeAtIndex(list.startIndex)
         assert(list, ==, [2, 3])
 
+        list.insert(1, atIndex: list.startIndex)
+        assert(list, ==, [1, 2, 3])
+
         list.removeAll(keepCapacity: false)
         assertEmpty(list)
 
-        list = [1, 2, 3, 4, 5, 6]
+        list.splice([1, 2, 3, 4, 5, 6], atIndex: list.endIndex)
+        assert(list, ==, [1, 2, 3, 4, 5, 6])
+
         list.replaceRange(list.startIndex.successor()..<advance(list.startIndex, 5), with: [3])
         assert(list, ==, [1, 3, 6])
 

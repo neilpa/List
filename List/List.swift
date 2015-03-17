@@ -71,6 +71,24 @@ public struct List<T> {
         self.tail = tail
     }
 
+    /// Replace the nodes at `subRange` with the given replacements.
+    private mutating func spliceList(subRange: Range<Index>, _ replacementHead: ListNode<T>?, _ replacementTail: ListNode<T>?) {
+        var prefixTail = subRange.startIndex.previous
+        var suffixHead = subRange.endIndex.node
+
+        if prefixTail == nil {
+            head = replacementHead ?? suffixHead
+        } else {
+            prefixTail?.next = replacementHead ?? suffixHead
+        }
+
+        if suffixHead == nil {
+            tail = replacementTail
+        } else {
+            replacementTail?.next = suffixHead
+        }
+    }
+    
     /// The type of nodes in `List`.
     private typealias Node = ListNode<T>
 
@@ -148,23 +166,29 @@ extension List : CollectionType, MutableCollectionType {
     public subscript(index: Index) -> T {
         get {
             return index.node!.value
-        } set {
+        }
+        set {
             index.node!.value = newValue
         }
     }
 }
 
-// MARK: Sliceable
+// MARK: Sliceable, MutableSliceable
 
-extension List : Sliceable {
+extension List : Sliceable, MutableSliceable {
     public typealias SubSlice = List
 
     /// Extract a slice of `List` from bounds.
     public subscript (bounds: Range<Index>) -> SubSlice {
-        // TODO Defer cloning the nodes until modification
-        var head = bounds.startIndex.node
-        var tail = bounds.endIndex.node
-        return head == tail ? List() : List(head?.clone(tail))
+        get {
+            // TODO Defer cloning the nodes until modification
+            var head = bounds.startIndex.node
+            var tail = bounds.endIndex.node
+            return head == tail ? List() : List(head?.clone(tail))
+        }
+        set(newList) {
+            self.spliceList(bounds, newList.head, newList.tail)
+        }
     }
 }
 
@@ -185,24 +209,9 @@ extension List : ExtensibleCollectionType {
 
 extension List : RangeReplaceableCollectionType {
     /// Replace the given `subRange` of elements with `newElements`.
-    public mutating func replaceRange<C : CollectionType where C.Generator.Element == T>(subRange: Range<Index>, with elements: C) {
-        var replacementHead = Node.create(elements)
-        var replacementTail = replacementHead?.last
-
-        var prefixTail = subRange.startIndex.previous
-        var suffixHead = subRange.endIndex.node
-
-        if prefixTail == nil {
-            head = replacementHead ?? suffixHead
-        } else {
-            prefixTail?.next = replacementHead ?? suffixHead
-        }
-
-        if suffixHead == nil {
-            tail = replacementTail
-        } else {
-            replacementTail?.next = suffixHead
-        }
+    public mutating func replaceRange<C : CollectionType where C.Generator.Element == T>(subRange: Range<Index>, with newElements: C) {
+        var replacement = Node.create(newElements)
+        spliceList(subRange, replacement, replacement?.last)
     }
 
     // The remaining methods rely on the Swift stdlib equivalent which are implemented
