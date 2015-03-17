@@ -172,7 +172,13 @@ final class ListTests: XCTestCase {
         list.insert(1, atIndex: list.startIndex)
         assert(list, ==, [1, 2, 3])
 
-        list.removeAll(keepCapacity: false)
+        list.removeRange(advance(list.startIndex, 1)..<advance(list.startIndex, 2))
+        assert(list, ==, [1, 3])
+
+        list.removeRange(list.startIndex.successor()..<list.endIndex)
+        assert(list, ==, [1])
+
+        list.removeRange(list.startIndex..<list.startIndex.successor())
         assertEmpty(list)
 
         list.splice([1, 2, 3, 4, 5, 6], atIndex: list.endIndex)
@@ -186,6 +192,9 @@ final class ListTests: XCTestCase {
 
         list.replaceRange(advance(list.startIndex, 3)..<list.endIndex, with: [1, 2, 3])
         assert(list, ==, [3, 2, 1, 1, 2, 3])
+
+        list.removeAll(keepCapacity: false)
+        assertEmpty(list)
     }
 
     func testPopFirst() {

@@ -42,12 +42,12 @@ public struct List<T> {
 
     /// Inserts a new `value` before the `first` value.
     public mutating func prepend(value: T) {
-        insert(value, atIndex: startIndex)
+        insertNode(nil, Node(value), head)
     }
 
     /// Inserts a new `value` after the `last` value.
     public mutating func append(value: T) {
-        insert(value, atIndex: endIndex)
+        insertNode(tail, Node(value), nil)
     }
 
     // MARK: Private
@@ -63,11 +63,8 @@ public struct List<T> {
         self.tail = tail
     }
 
-    /// Replace the nodes at `subRange` with the given replacements.
-    private mutating func spliceList(subRange: Range<Index>, _ replacementHead: ListNode<T>?, _ replacementTail: ListNode<T>?) {
-        var prefixTail = subRange.startIndex.previous
-        var suffixHead = subRange.endIndex.node
-
+    /// Replace nodes at the given insertion point
+    private mutating func spliceList(prefixTail: Node?, _ replacementHead: Node?, _ replacementTail: Node?, _ suffixHead: Node?) {
         if prefixTail == nil {
             head = replacementHead ?? suffixHead
         } else {
@@ -80,7 +77,26 @@ public struct List<T> {
             replacementTail?.next = suffixHead
         }
     }
-    
+
+    /// Replace the nodes at `subRange` with the given replacements.
+    private mutating func spliceList(subRange: Range<Index>, _ replacementHead: Node?, _ replacementTail: Node?) {
+        spliceList(subRange.startIndex.previous, replacementHead, replacementTail, subRange.endIndex.node)
+    }
+
+    /// Inserts a new `node` between `prefix` and `suffix`.
+    private mutating func insertNode(prefix: Node?, _ node: Node, _ suffix: Node?) {
+        spliceList(prefix, node, node, suffix)
+    }
+
+    /// Removes the `node` that follows `previous`.
+    private mutating func removeNode(node: Node, previous: Node?) -> T {
+        precondition(previous?.next == node || previous == nil)
+
+        let value = node.value
+        spliceList(previous, nil, nil, node.next)
+        return value
+    }
+
     /// The type of nodes in `List`.
     private typealias Node = ListNode<T>
 
@@ -98,9 +114,7 @@ extension List : QueueType, StackType {
 
     /// Removes the `first` value at the head of `List` and returns it, `nil` if empty.
     public mutating func popFirst() -> T? {
-        let value = head?.value
-        self.removeAtIndex(startIndex)
-        return value
+        return removeNode(head!, previous: nil)
     }
 
     /// Inserts a new `value` before the `first` value.
@@ -174,7 +188,7 @@ extension List : Sliceable, MutableSliceable {
             return head == tail ? List() : List(head?.clone(tail))
         }
         set(newList) {
-            self.spliceList(bounds, newList.head, newList.tail)
+            spliceList(bounds, newList.head, newList.tail)
         }
     }
 }
@@ -186,7 +200,7 @@ extension List : ExtensibleCollectionType {
     public mutating func reserveCapacity(amount: Index.Distance) {
     }
 
-    /// Appends multiple elements to the end of `Queue`
+    /// Appends multiple elements to the end of `Queue`.
     public mutating func extend<S: SequenceType where S.Generator.Element == T>(values: S) {
         map(values) { self.append($0) }
     }
@@ -195,38 +209,36 @@ extension List : ExtensibleCollectionType {
 // MARK: RangeReplaceableCollectionType
 
 extension List : RangeReplaceableCollectionType {
-    /// Replace the given `subRange` of elements with `newElements`.
-    public mutating func replaceRange<C : CollectionType where C.Generator.Element == T>(subRange: Range<Index>, with newElements: C) {
-        var replacement = Node.create(newElements)
+    /// Replace the given `subRange` of elements with `values`.
+    public mutating func replaceRange<C : CollectionType where C.Generator.Element == T>(subRange: Range<Index>, with values: C) {
+        var replacement = Node.create(values)
         spliceList(subRange, replacement, replacement?.last)
     }
 
-    // The remaining methods rely on the Swift stdlib equivalent which are implemented
-    // in terms of `rangeReplace`
-
-    /// Insert `newElement` at index `i`.
-    public mutating func insert(newElement: T, atIndex i: Index) {
-        Swift.insert(&self, newElement, atIndex: i)
+    /// Insert `value` at `index`.
+    public mutating func insert(value: T, atIndex index: Index) {
+        insertNode(index.previous, Node(value), index.node)
     }
 
-    /// Insert `newElements` at index `i`
-    public mutating func splice<C : CollectionType where C.Generator.Element == T>(newElements: C, atIndex i: Index) {
-        Swift.splice(&self, newElements, atIndex: i)
+    /// Insert `values` at `index`.
+    public mutating func splice<C : CollectionType where C.Generator.Element == T>(values: C, atIndex index: Index) {
+        var replacement = Node.create(values)
+        spliceList(index.previous, replacement, replacement?.last, index.node)
     }
 
-    /// Remove the element at index `i`
-    public mutating func removeAtIndex(i: Index) -> T {
-        return Swift.removeAtIndex(&self, i)
+    /// Remove the element at `index` and returns it.
+    public mutating func removeAtIndex(index: Index) -> T {
+        return removeNode(index.node!, previous: index.previous)
     }
 
-    /// Remove the indicated `subRange` of elements
+    /// Remove the indicated `subRange` of values.
     public mutating func removeRange(subRange: Range<Index>) {
-        return Swift.removeRange(&self, subRange)
+        spliceList(subRange.startIndex.previous, nil, nil, subRange.endIndex.node)
     }
 
-    /// Remove all elements
+    /// Remove all values from `List`.
     public mutating func removeAll(#keepCapacity: Bool) {
-        return Swift.removeAll(&self, keepCapacity: keepCapacity)
+        spliceList(nil, nil, nil, nil)
     }
 }
 
@@ -260,7 +272,7 @@ public struct ListIndex<T> : ForwardIndexType {
     /// Current `node` that `ListIndex` points at.
     private let node: Node?
 
-    /// The node before `node`, enables RangeRepleaceableCollectionType
+    /// The node before `node`, enables RangeRepleaceableCollectionType.
     private let previous: Node?
 
     /// Create an index pointing to `node`.
