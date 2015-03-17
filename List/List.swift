@@ -113,17 +113,17 @@ extension List : QueueType, StackType {
     public typealias Element = T
 
     /// Removes the `first` value at the head of `List` and returns it, `nil` if empty.
-    public mutating func popFirst() -> T? {
+    public mutating func removeFirst() -> T {
         return removeNode(head!, previous: nil)
     }
 
     /// Inserts a new `value` before the `first` value.
-    public mutating func pushFirst(value: T) {
+    public mutating func insertFirst(value: T) {
         prepend(value)
     }
 
     /// Inserts a new `value` after the `last` value.
-    public mutating func pushLast(value: T) {
+    public mutating func insertLast(value: T) {
         append(value)
     }
 }

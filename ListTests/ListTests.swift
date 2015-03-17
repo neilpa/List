@@ -197,19 +197,19 @@ final class ListTests: XCTestCase {
         assertEmpty(list)
     }
 
-    func testPopFirst() {
+    func testRemoveFirst() {
         var list: List<Int> = [1, 2]
 
-        assertEqual(list.popFirst(), 1)
+        assertEqual(list.removeFirst(), 1)
         assert(list, ==, [2])
 
-        assertEqual(list.popFirst(), 2)
+        assertEqual(list.removeFirst(), 2)
         assertEmpty(list)
 
-        list.pushLast(42)
+        list.insertLast(42)
         assert(list, ==, [42])
 
-        assertEqual(list.popFirst(), 42)
+        assertEqual(list.removeFirst(), 42)
         assertEmpty(list)
     }
 
