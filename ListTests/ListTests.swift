@@ -213,6 +213,14 @@ final class ListTests: XCTestCase {
         assertEmpty(list)
     }
 
+    func testHigherOrderFunctions() {
+        let list: List<Int> = [1, 2, 3, 4, 5, 6]
+
+        assert(list.map(toString), ==, ["1", "2", "3", "4", "5", "6"])
+        assert(list.filter { $0 % 2 == 0 }, ==, [2, 4, 6])
+        assert(list.filter { $0 % 2 == 1 }, ==, [1, 3, 5])
+    }
+
     func assertEmpty<T>(list: List<T>, file: String = __FILE__, line: UInt = __LINE__) {
         assertEqual(list.isEmpty, true, "", file, line)
         assertNil(list.first, "", file: file, line: line)

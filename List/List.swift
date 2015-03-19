@@ -57,7 +57,12 @@ public struct List<T> {
         self.init(head, head?.last)
     }
 
-    /// Initializes `List` with `head` and `tail`
+    /// Initializes `List` with a new set of `ends`
+    private init(_ ends: ListEnds<T>?) {
+        self.init(ends?.head, ends?.tail)
+    }
+
+    /// Initializes `List` with `head` and `tail`.
     private init(_ head: Node?, _ tail: Node?) {
         self.head = head
         self.tail = tail
@@ -185,7 +190,7 @@ extension List : Sliceable, MutableSliceable {
             // TODO Defer cloning the nodes until modification
             var head = bounds.startIndex.node
             var tail = bounds.endIndex.node
-            return head == tail ? List() : List(head?.clone(tail))
+            return head == tail ? List() : List(head?.takeUntil(tail))
         }
         set(newList) {
             spliceList(bounds, newList.head, newList.tail)
@@ -202,7 +207,7 @@ extension List : ExtensibleCollectionType {
 
     /// Appends multiple elements to the end of `Queue`.
     public mutating func extend<S: SequenceType where S.Generator.Element == T>(values: S) {
-        map(values) { self.append($0) }
+        Swift.map(values) { self.append($0) }
     }
 }
 
@@ -212,7 +217,7 @@ extension List : RangeReplaceableCollectionType {
     /// Replace the given `subRange` of elements with `values`.
     public mutating func replaceRange<C : CollectionType where C.Generator.Element == T>(subRange: Range<Index>, with values: C) {
         var replacement = Node.create(values)
-        spliceList(subRange, replacement, replacement?.last)
+        spliceList(subRange, replacement.head, replacement.tail)
     }
 
     /// Insert `value` at `index`.
@@ -223,7 +228,7 @@ extension List : RangeReplaceableCollectionType {
     /// Insert `values` at `index`.
     public mutating func splice<C : CollectionType where C.Generator.Element == T>(values: C, atIndex index: Index) {
         var replacement = Node.create(values)
-        spliceList(index.previous, replacement, replacement?.last, index.node)
+        spliceList(index.previous, replacement.head, replacement.tail, index.node)
     }
 
     /// Remove the element at `index` and returns it.
@@ -259,6 +264,20 @@ extension List : Printable, DebugPrintable {
     public func describe(stringify: T -> String) -> String {
         let string = join(", ", lazy(self).map(stringify))
         return "[\(string)]"
+    }
+}
+
+// MARK: Higher-order functions
+
+extension List {
+    /// Maps values in `List` with `transform` to create a new `List`
+    public func map<U>(transform: T -> U) -> List<U> {
+        return List<U>(head?.map(transform))
+    }
+
+    /// Filters values from `List` with `predicate` to create a new `List`
+    public func filter(predicate: T -> Bool) -> List {
+        return List(head?.filter(predicate))
     }
 }
 
