@@ -104,18 +104,17 @@ extension ListNode {
 }
 
 /// Recursively creates a copy of `ListNode`s returning the new head and tail.
-public func clone<T>(node: ListNode<T>) -> (ListNode<T>, ListNode<T>) {
-    let head = ListNode(node.value)
-    return clone(head, head, node)
+public func clone<T>(node: ListNode<T>) -> ListEnds<T> {
+    return clone(ListEnds<T>(), node)
 }
 
 /// Recursively creates a copy of `ListNode`s returning the new head and tail.
-private func clone<T>(head: ListNode<T>, tail: ListNode<T>, original: ListNode<T>) -> (ListNode<T>, ListNode<T>) {
-    if let next = original.next {
-        tail.next = ListNode(next.value)
-        return clone(head, tail.next!, next)
+private func clone<T>(var ends: ListEnds<T>, node: ListNode<T>) -> ListEnds<T> {
+    ends.append(node.value)
+    if let next = node.next {
+        return clone(ends, next)
     }
-    return (head, tail)
+    return ends
 }
 
 // MARK: Equality
@@ -127,3 +126,22 @@ extension ListNode : Equatable {
 public func == <T> (lhs: ListNode<T>, rhs: ListNode<T>) -> Bool {
     return lhs === rhs
 }
+
+// MARK: ListEnds
+
+/// Wrapper for the `head` and `tail` of list nodes.
+public struct ListEnds<T> {
+    var head: ListNode<T>?
+    var tail: ListNode<T>?
+
+    /// Appends a new `value` to the current `tail` and updates it.
+    mutating func append(value: T) {
+        if let node = tail?.insertAfter(value) {
+            tail = node
+        } else {
+            head = ListNode<T>(value)
+            tail = head
+        }
+    }
+}
+
