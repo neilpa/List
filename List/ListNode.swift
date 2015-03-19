@@ -13,12 +13,10 @@ public final class ListNode<T> {
     ///
     /// Ideally this would be a failable initializier but limitations in Swift prevent that
     /// prevent that on class types - http://stackoverflow.com/a/26497229/1999152.
-    public static func create<S: SequenceType where S.Generator.Element == T>(values: S) -> ListNode? {
-        var generator = values.generate()
-        if let first = generator.next() {
-            return ListNode(first, generator)
-        }
-        return nil
+    public static func create<S: SequenceType where S.Generator.Element == T>(values: S) -> ListEnds<T> {
+        var ends = ListEnds<T>()
+        Swift.map(values) { ends.append($0) }
+        return ends
     }
 
     // MARK: Properties
@@ -94,27 +92,53 @@ extension ListNode : SequenceType {
     }
 }
 
-// MARK: Copying
+// MARK: Higher-order functions
 
 extension ListNode {
-    /// Recursively creates a copy of `ListNode`s until `tail` returning the new head.
-    public func clone(tail: ListNode?) -> ListNode {
-        return ListNode(value, next != tail ? next?.clone(tail) : nil)
+    /// Maps values in self with `transform` to create a new list.
+    public func map<U>(transform: T -> U) -> ListEnds<U> {
+        return reduce(ListEnds<U>()) { (var ends, node) in
+            ends.append(transform(node.value))
+            return ends
+        }
     }
-}
 
-/// Recursively creates a copy of `ListNode`s returning the new head and tail.
-public func clone<T>(node: ListNode<T>) -> ListEnds<T> {
-    return clone(ListEnds<T>(), node)
-}
-
-/// Recursively creates a copy of `ListNode`s returning the new head and tail.
-private func clone<T>(var ends: ListEnds<T>, node: ListNode<T>) -> ListEnds<T> {
-    ends.append(node.value)
-    if let next = node.next {
-        return clone(ends, next)
+    /// Filters values in self with `predicate` to create a new list.
+    public func filter(predicate: T -> Bool) -> ListEnds<T> {
+        return self.reduce(ListEnds<T>()) { (var ends, node) in
+            if predicate(node.value) {
+                ends.append(node.value)
+            }
+            return ends
+        }
     }
-    return ends
+
+    /// Takes values up to `tail` to create a new list.
+    public func takeUntil(tail: ListNode?) -> ListEnds<T> {
+        return takeWhile(ListEnds<T>()) { $0 != tail }
+    }
+
+    /// Takes values while `predicate` returns true to create a new list.
+    public func takeWhile(predicate: ListNode -> Bool) -> ListEnds<T> {
+        return takeWhile(ListEnds<T>(), predicate)
+    }
+
+    /// Takes values while `predicate` returns true to create a new list.
+    private func takeWhile(var ends: ListEnds<T>, _ predicate: ListNode -> Bool) -> ListEnds<T> {
+        if !predicate(self) {
+            return ends
+        }
+
+        ends.append(value)
+        return next?.takeWhile(ends, predicate) ?? ends
+    }
+
+    /// Reduces all nodes to with `transform`.
+    public func reduce<U>(initial: U, _ transform: (U, ListNode) -> U) -> U {
+        // TODO Would be nice if this were lazy
+        let reduction = transform(initial, self)
+        return next?.reduce(reduction, transform) ?? reduction
+    }
 }
 
 // MARK: Equality
