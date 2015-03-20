@@ -3,35 +3,35 @@
 import Dumpster
 
 /// A singly-linked list of values.
-public struct List<T> {
+public struct ForwardList<T> {
     // MARK: Constructors
 
-    /// Initializes an empty `List`.
+    /// Initializes an empty `ForwardList`.
     public init() {
     }
 
-    /// Initializes a `List` with a single `value`.
+    /// Initializes a `ForwardList` with a single `value`.
     public init(value: T) {
         self.init(Node(value))
     }
 
-    /// Initializes a `List` with a collection of `values`.
+    /// Initializes a `ForwardList` with a collection of `values`.
     public init<S: SequenceType where S.Generator.Element == T>(_ values: S) {
         // TODO This should return the tail of the list as well so we don't rely on `head.last`
         self.init(Node.create(values))
     }
 
-    /// Initializes `List` with `head`.
+    /// Initializes `ForwardList` with `head`.
     private init(_ head: Node?) {
         self.init(head, head?.last)
     }
 
-    /// Initializes `List` with a new set of `ends`
+    /// Initializes `ForwardList` with a new set of `ends`
     private init(_ ends: ListEnds<Node>?) {
         self.init(ends?.head, ends?.tail)
     }
 
-    /// Initializes `List` with `head` and `tail`.
+    /// Initializes `ForwardList` with `head` and `tail`.
     private init(_ head: Node?, _ tail: Node?) {
         self.head = head
         self.tail = tail
@@ -73,37 +73,37 @@ public struct List<T> {
         return value
     }
 
-    /// The type of nodes in `List`.
-    private typealias Node = ListNode<T>
+    /// The type of nodes in `ForwardList`.
+    private typealias Node = ForwardListNode<T>
 
-    /// The first node of `List`.
+    /// The first node of `ForwardList`.
     private var head: Node?
 
-    /// The last node of `List`.
+    /// The last node of `ForwardList`.
     private var tail: Node?
 }
 
 // MARK: Queue/Stack
 
-extension List : QueueType, StackType {
+extension ForwardList : QueueType, StackType {
     public typealias Element = T
 
-    /// Returns true iff `List` is empty.
+    /// Returns true iff `ForwardList` is empty.
     public var isEmpty: Bool {
         return head == nil
     }
 
-    /// Returns the value at the head of `List`, `nil` if empty.
+    /// Returns the value at the head of `ForwardList`, `nil` if empty.
     public var first: T? {
         return head?.value
     }
 
-    /// Returns the value at the tail of `List`, `nil` if empty.
+    /// Returns the value at the tail of `ForwardList`, `nil` if empty.
     public var last: T? {
         return tail?.value
     }
     
-    /// Removes the `first` value at the head of `List` and returns it, `nil` if empty.
+    /// Removes the `first` value at the head of `ForwardList` and returns it, `nil` if empty.
     public mutating func removeFirst() -> T {
         return removeNode(head!, previous: nil)
     }
@@ -121,8 +121,8 @@ extension List : QueueType, StackType {
 
 // MARK: ArrayLiteralConvertible
 
-extension List : ArrayLiteralConvertible {
-    /// Initializes a `List` with the `elements` from array.
+extension ForwardList : ArrayLiteralConvertible {
+    /// Initializes a `ForwardList` with the `elements` from array.
     public init(arrayLiteral elements: T...) {
         self.init(elements)
     }
@@ -130,10 +130,10 @@ extension List : ArrayLiteralConvertible {
 
 // MARK: SequenceType
 
-extension List : SequenceType {
+extension ForwardList : SequenceType {
     public typealias Generator = GeneratorOf<T>
 
-    /// Create a `Generator` that enumerates all the values in `List`.
+    /// Create a `Generator` that enumerates all the values in `ForwardList`.
     public func generate() -> Generator {
         return head?.values() ?? Generator { nil }
     }
@@ -141,20 +141,20 @@ extension List : SequenceType {
 
 // MARK: CollectionType, MutableCollectionType
 
-extension List : CollectionType, MutableCollectionType {
-    public typealias Index = ListIndex<T>
+extension ForwardList : CollectionType, MutableCollectionType {
+    public typealias Index = ForwardListIndex<T>
 
-    /// Index to the first element of `List`.
+    /// Index to the first element of `ForwardList`.
     public var startIndex: Index {
         return Index(head)
     }
 
-    /// Index past the last element of `List`.
+    /// Index past the last element of `ForwardList`.
     public var endIndex: Index {
         return Index(nil, tail)
     }
 
-    /// Retrieves or updates the element in `List` at `index`.
+    /// Retrieves or updates the element in `ForwardList` at `index`.
     public subscript(index: Index) -> T {
         get {
             return index.node!.value
@@ -167,16 +167,16 @@ extension List : CollectionType, MutableCollectionType {
 
 // MARK: Sliceable, MutableSliceable
 
-extension List : Sliceable, MutableSliceable {
-    public typealias SubSlice = List
+extension ForwardList : Sliceable, MutableSliceable {
+    public typealias SubSlice = ForwardList
 
-    /// Extract a slice of `List` from bounds.
+    /// Extract a slice of `ForwardList` from bounds.
     public subscript (bounds: Range<Index>) -> SubSlice {
         get {
             // TODO Defer cloning the nodes until modification
             var head = bounds.startIndex.node
             var tail = bounds.endIndex.node
-            return head == tail ? List() : List(head?.takeUntil(tail))
+            return head == tail ? ForwardList() : ForwardList(head?.takeUntil(tail))
         }
         set(newList) {
             spliceList(bounds, newList.head, newList.tail)
@@ -186,17 +186,17 @@ extension List : Sliceable, MutableSliceable {
 
 // MARK: ExtensibleCollectionType
 
-extension List : ExtensibleCollectionType {
+extension ForwardList : ExtensibleCollectionType {
     /// Does nothing.
     public mutating func reserveCapacity(amount: Index.Distance) {
     }
 
-    /// Appends `value to the end of `List`.
+    /// Appends `value to the end of `ForwardList`.
     public mutating func append(value: T) {
         self.insertLast(value)
     }
 
-    /// Appends multiple elements to the end of `List`.
+    /// Appends multiple elements to the end of `ForwardList`.
     public mutating func extend<S: SequenceType where S.Generator.Element == T>(values: S) {
         Swift.map(values) { self.insertLast($0) }
     }
@@ -204,7 +204,7 @@ extension List : ExtensibleCollectionType {
 
 // MARK: RangeReplaceableCollectionType
 
-extension List : RangeReplaceableCollectionType {
+extension ForwardList : RangeReplaceableCollectionType {
     /// Replace the given `subRange` of elements with `values`.
     public mutating func replaceRange<C : CollectionType where C.Generator.Element == T>(subRange: Range<Index>, with values: C) {
         var replacement = Node.create(values)
@@ -232,7 +232,7 @@ extension List : RangeReplaceableCollectionType {
         spliceList(subRange.startIndex.previous, nil, nil, subRange.endIndex.node)
     }
 
-    /// Remove all values from `List`.
+    /// Remove all values from `ForwardList`.
     public mutating func removeAll(#keepCapacity: Bool) {
         spliceList(nil, nil, nil, nil)
     }
@@ -240,13 +240,13 @@ extension List : RangeReplaceableCollectionType {
 
 // MARK: Printable
 
-extension List : Printable, DebugPrintable {
-    /// String representation of `List`.
+extension ForwardList : Printable, DebugPrintable {
+    /// String representation of `ForwardList`.
     public var description: String {
         return describe(toString)
     }
 
-    /// Debug string representation of `List`.
+    /// Debug string representation of `ForwardList`.
     public var debugDescription: String {
         return describe(toDebugString)
     }
@@ -260,14 +260,14 @@ extension List : Printable, DebugPrintable {
 
 // MARK: Higher-order functions
 
-extension List {
-    /// Maps values in `List` with `transform` to create a new `List`
-    public func map<U>(transform: T -> U) -> List<U> {
-        return List<U>(head?.map(transform))
+extension ForwardList {
+    /// Maps values in `ForwardList` with `transform` to create a new `ForwardList`
+    public func map<U>(transform: T -> U) -> ForwardList<U> {
+        return ForwardList<U>(head?.map(transform))
     }
 
-    /// Filters values from `List` with `predicate` to create a new `List`
-    public func filter(predicate: T -> Bool) -> List {
-        return List(head?.filter(predicate))
+    /// Filters values from `ForwardList` with `predicate` to create a new `ForwardList`
+    public func filter(predicate: T -> Bool) -> ForwardList {
+        return ForwardList(head?.filter(predicate))
     }
 }

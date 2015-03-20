@@ -1,11 +1,11 @@
 //  Copyright (c) 2015 Neil Pankey. All rights reserved.
 
-/// Index to a value in `List`.
-public struct ListIndex<T> : ForwardIndexType {
-    /// Nodes that the `ListIndex` wraps.
-    internal typealias Node = ListNode<T>
+/// Index to a value in `ForwardList`.
+public struct ForwardListIndex<T> : ForwardIndexType {
+    /// Nodes that the `ForwardListIndex` wraps.
+    internal typealias Node = ForwardListNode<T>
 
-    /// Current `node` that `ListIndex` points at.
+    /// Current `node` that `ForwardListIndex` points at.
     internal let node: Node?
 
     /// The node before `node`, enables RangeRepleaceableCollectionType.
@@ -24,13 +24,13 @@ public struct ListIndex<T> : ForwardIndexType {
         self.previous = previous
     }
 
-    /// Returns the next `ListIndex`.
-    public func successor() -> ListIndex {
-        return ListIndex(node!.next, node)
+    /// Returns the next `ForwardListIndex`.
+    public func successor() -> ForwardListIndex {
+        return ForwardListIndex(node!.next, node)
     }
 }
 
 /// Determines if two indexes are equal.
-public func == <T> (lhs: ListIndex<T>, rhs: ListIndex<T>) -> Bool {
+public func == <T> (lhs: ForwardListIndex<T>, rhs: ForwardListIndex<T>) -> Bool {
     return lhs.node == rhs.node
 }

@@ -1,7 +1,7 @@
 //  Copyright (c) 2015 Neil Pankey. All rights reserved.
 
-/// Generic, singly-linked list of nodes. The basis for `List` and other higher level collections.
-internal final class ListNode<T> : NodeType {
+/// Generic, singly-linked list of nodes. The basis for `ForwardList` and other higher level collections.
+internal final class ForwardListNode<T> : NodeType {
     // MARK: Constructors
 
     /// Initialize a new node with `value` and no tail.
@@ -25,31 +25,31 @@ internal final class ListNode<T> : NodeType {
     internal var value: T
 
     /// The remainder of the list.
-    internal var next: ListNode?
+    internal var next: ForwardListNode?
 
     /// The `last` node in the list. This is O(n) since it walks the entire list.
-    internal var last: ListNode {
+    internal var last: ForwardListNode {
         return next?.last ?? self
     }
 
     /// MARK: Operations
 
-    /// Prefixes the receiver with a new value returning the created `ListNode`.
-    internal func insertBefore(value: T) -> ListNode {
-        return ListNode(value, self)
+    /// Prefixes the receiver with a new value returning the created `ForwardListNode`.
+    internal func insertBefore(value: T) -> ForwardListNode {
+        return ForwardListNode(value, self)
     }
 
-    /// Replaces `next` of the receiver with a new value returning the created `ListNode` which points at the replaced `next`.
-    internal func insertAfter(value: T) -> ListNode {
-        next = ListNode(value, next)
+    /// Replaces `next` of the receiver with a new value returning the created `ForwardListNode` which points at the replaced `next`.
+    internal func insertAfter(value: T) -> ForwardListNode {
+        next = ForwardListNode(value, next)
         return next!
     }
 
     // MARK: Private
-    private typealias Ends = ListEnds<ListNode>
+    private typealias Ends = ListEnds<ForwardListNode>
 
     /// Initializes a new node with `value` and `next`.
-    private init(_ value: T, _ next: ListNode?) {
+    private init(_ value: T, _ next: ForwardListNode?) {
         self.value = value
         self.next = next
     }
@@ -58,19 +58,19 @@ internal final class ListNode<T> : NodeType {
     private init<G: GeneratorType where G.Element == T>(_ value: T, var _ generator: G) {
         self.value = value
         if let tail = generator.next() {
-            next = ListNode(tail, generator)
+            next = ForwardListNode(tail, generator)
         }
     }
 }
 
 // MARK: SequenceType
 
-extension ListNode : SequenceType {
-    internal typealias Generator = GeneratorOf<ListNode>
+extension ForwardListNode : SequenceType {
+    internal typealias Generator = GeneratorOf<ForwardListNode>
 
     /// Create a `Generator` that enumerates all the nodes.
     internal func generate() -> Generator {
-        var node: ListNode? = self
+        var node: ForwardListNode? = self
 
         return Generator {
             let current = node
@@ -81,7 +81,7 @@ extension ListNode : SequenceType {
 
     /// Create a `Generator` that enumerates all the values of nodes.
     internal func values() -> GeneratorOf<T> {
-        var node: ListNode? = self
+        var node: ForwardListNode? = self
 
         return GeneratorOf<T> {
             if let value = node?.value {
@@ -95,10 +95,10 @@ extension ListNode : SequenceType {
 
 // MARK: Higher-order functions
 
-extension ListNode {
+extension ForwardListNode {
     /// Maps values in self with `transform` to create a new list.
-    internal func map<U>(transform: T -> U) -> ListEnds<ListNode<U>> {
-        return reduce(ListEnds<ListNode<U>>()) { (var ends, node) in
+    internal func map<U>(transform: T -> U) -> ListEnds<ForwardListNode<U>> {
+        return reduce(ListEnds<ForwardListNode<U>>()) { (var ends, node) in
             ends.append(transform(node.value))
             return ends
         }
@@ -115,17 +115,17 @@ extension ListNode {
     }
 
     /// Takes values up to `tail` to create a new list.
-    internal func takeUntil(tail: ListNode?) -> Ends {
+    internal func takeUntil(tail: ForwardListNode?) -> Ends {
         return takeWhile(Ends()) { $0 != tail }
     }
 
     /// Takes values while `predicate` returns true to create a new list.
-    internal func takeWhile(predicate: ListNode -> Bool) -> Ends {
+    internal func takeWhile(predicate: ForwardListNode -> Bool) -> Ends {
         return takeWhile(Ends(), predicate)
     }
 
     /// Takes values while `predicate` returns true to create a new list.
-    private func takeWhile(var ends: Ends, _ predicate: ListNode -> Bool) -> Ends {
+    private func takeWhile(var ends: Ends, _ predicate: ForwardListNode -> Bool) -> Ends {
         if !predicate(self) {
             return ends
         }
@@ -135,7 +135,7 @@ extension ListNode {
     }
 
     /// Reduces all nodes to with `transform`.
-    internal func reduce<U>(initial: U, _ transform: (U, ListNode) -> U) -> U {
+    internal func reduce<U>(initial: U, _ transform: (U, ForwardListNode) -> U) -> U {
         // TODO Would be nice if this were lazy
         let reduction = transform(initial, self)
         return next?.reduce(reduction, transform) ?? reduction
@@ -144,11 +144,11 @@ extension ListNode {
 
 // MARK: Equality
 
-extension ListNode : Equatable {
+extension ForwardListNode : Equatable {
 }
 
 /// Determines if two nodes are equal via identity.
-internal func == <T> (lhs: ListNode<T>, rhs: ListNode<T>) -> Bool {
+internal func == <T> (lhs: ForwardListNode<T>, rhs: ForwardListNode<T>) -> Bool {
     return lhs === rhs
 }
 

@@ -6,15 +6,15 @@ import Assertions
 import Equality
 import XCTest
 
-final class ListTests: XCTestCase {
+final class ForwardListTests: XCTestCase {
     func testEmptyList() {
-        assertEmpty(List<Bool>())
-        assertEmpty(List<String>())
-        assertEmpty(List<Int>())
+        assertEmpty(ForwardList<Bool>())
+        assertEmpty(ForwardList<String>())
+        assertEmpty(ForwardList<Int>())
     }
 
     func testInsertFirst() {
-        var list: List<Int> = List()
+        var list: ForwardList<Int> = ForwardList()
 
         list.insertFirst(1)
         assert(list, ==, [1])
@@ -25,7 +25,7 @@ final class ListTests: XCTestCase {
     }
 
     func testInsertLast() {
-        var list: List<Int> = List()
+        var list: ForwardList<Int> = ForwardList()
 
         list.insertLast(1)
         assert(list, ==, [1])
@@ -36,11 +36,11 @@ final class ListTests: XCTestCase {
     }
 
     func testSingleConstruction() {
-        assert(List(value: 42), ==, [42])
-        assert(List(value: false), ==, [false])
-        assert(List(value: "hi"), ==, ["hi"])
+        assert(ForwardList(value: 42), ==, [42])
+        assert(ForwardList(value: false), ==, [false])
+        assert(ForwardList(value: "hi"), ==, ["hi"])
 
-        var list = List(value: 1)
+        var list = ForwardList(value: 1)
         list.insertLast(2)
         assert(list, ==, [1, 2])
 
@@ -49,7 +49,7 @@ final class ListTests: XCTestCase {
     }
 
     func testArrayLiteralConvertible() {
-        var list: List<Int> = []
+        var list: ForwardList<Int> = []
         assertEmpty(list)
 
         list = [42]
@@ -66,7 +66,7 @@ final class ListTests: XCTestCase {
     }
 
     func testCollectionType() {
-        let list: List<Character> = ["a", "b", "c", "d", "e"]
+        let list: ForwardList<Character> = ["a", "b", "c", "d", "e"]
         var index = list.startIndex
         assertEqual(list[index++], "a")
         assertEqual(list[index++], "b")
@@ -77,7 +77,7 @@ final class ListTests: XCTestCase {
     }
 
     func testMutableCollectionType() {
-        var list: List<String> = ["a", "b", "c", "d", "e"]
+        var list: ForwardList<String> = ["a", "b", "c", "d", "e"]
         for index in list.startIndex..<list.endIndex {
             list[index] = list[index].uppercaseString
         }
@@ -85,7 +85,7 @@ final class ListTests: XCTestCase {
     }
 
     func testSliceable() {
-        let list: List<Character> = ["a", "b", "c", "d", "e"]
+        let list: ForwardList<Character> = ["a", "b", "c", "d", "e"]
         let fst = list.startIndex
         let snd = fst.successor()
         let thrd = snd.successor()
@@ -111,7 +111,7 @@ final class ListTests: XCTestCase {
     }
 
     func testSliceMutations() {
-        var list: List<Int> = [1, 2, 3, 4]
+        var list: ForwardList<Int> = [1, 2, 3, 4]
         let index = list.startIndex.successor()
         var slice = list[index...index.successor()]
 
@@ -133,23 +133,23 @@ final class ListTests: XCTestCase {
     }
 
     func testMutableSlice() {
-        var list: List<Int> = [1, 2, 3, 4]
+        var list: ForwardList<Int> = [1, 2, 3, 4]
 
-        list[list.startIndex...list.startIndex] = List<Int>([9, 8])
+        list[list.startIndex...list.startIndex] = ForwardList<Int>([9, 8])
         assert(list, ==, [9, 8, 2, 3, 4])
 
-        list[list.endIndex..<list.endIndex] = List<Int>(value: 5)
+        list[list.endIndex..<list.endIndex] = ForwardList<Int>(value: 5)
         assert(list, ==, [9, 8, 2, 3, 4, 5])
 
-        list[list.startIndex.successor()..<advance(list.startIndex, 3)] = List<Int>([6, 6, 6])
+        list[list.startIndex.successor()..<advance(list.startIndex, 3)] = ForwardList<Int>([6, 6, 6])
         assert(list, ==, [9, 6, 6, 6, 3, 4, 5])
 
-        list[list.startIndex..<list.endIndex] = List<Int>()
+        list[list.startIndex..<list.endIndex] = ForwardList<Int>()
         assertEmpty(list)
     }
 
     func testExtensibleCollectionType() {
-        var list: List<Int> = []
+        var list: ForwardList<Int> = []
         list.extend([])
         assertEmpty(list)
 
@@ -158,7 +158,7 @@ final class ListTests: XCTestCase {
     }
 
     func testRangeReplaceableCollectionType() {
-        var list: List<Int> = []
+        var list: ForwardList<Int> = []
 
         list.insert(1, atIndex: list.startIndex)
         assert(list, ==, [1])
@@ -198,7 +198,7 @@ final class ListTests: XCTestCase {
     }
 
     func testRemoveFirst() {
-        var list: List<Int> = [1, 2]
+        var list: ForwardList<Int> = [1, 2]
 
         assertEqual(list.removeFirst(), 1)
         assert(list, ==, [2])
@@ -214,14 +214,14 @@ final class ListTests: XCTestCase {
     }
 
     func testHigherOrderFunctions() {
-        let list: List<Int> = [1, 2, 3, 4, 5, 6]
+        let list: ForwardList<Int> = [1, 2, 3, 4, 5, 6]
 
         assert(list.map(toString), ==, ["1", "2", "3", "4", "5", "6"])
         assert(list.filter { $0 % 2 == 0 }, ==, [2, 4, 6])
         assert(list.filter { $0 % 2 == 1 }, ==, [1, 3, 5])
     }
 
-    func assertEmpty<T>(list: List<T>, file: String = __FILE__, line: UInt = __LINE__) {
+    func assertEmpty<T>(list: ForwardList<T>, file: String = __FILE__, line: UInt = __LINE__) {
         assertEqual(list.isEmpty, true, "", file, line)
         assertNil(list.first, "", file: file, line: line)
     }
