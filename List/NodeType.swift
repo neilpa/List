@@ -5,6 +5,9 @@ internal protocol NodeType {
     /// Type of value stored in the list node.
     typealias Value
 
+    /// Construct a new node from `value`.
+    init(_ value: Value)
+
     /// The `value` stored at this node.
     var value: Value { get set }
 

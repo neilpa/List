@@ -27,7 +27,7 @@ public struct List<T> {
     }
 
     /// Initializes `List` with a new set of `ends`
-    private init(_ ends: ListEnds<T>?) {
+    private init(_ ends: ListEnds<Node>?) {
         self.init(ends?.head, ends?.tail)
     }
 

@@ -13,8 +13,8 @@ internal final class ListNode<T> : NodeType {
     ///
     /// Ideally this would be a failable initializier but limitations in Swift prevent that
     /// prevent that on class types - http://stackoverflow.com/a/26497229/1999152.
-    internal static func create<S: SequenceType where S.Generator.Element == T>(values: S) -> ListEnds<T> {
-        var ends = ListEnds<T>()
+    internal static func create<S: SequenceType where S.Generator.Element == T>(values: S) -> Ends {
+        var ends = Ends()
         Swift.map(values) { ends.append($0) }
         return ends
     }
@@ -46,6 +46,7 @@ internal final class ListNode<T> : NodeType {
     }
 
     // MARK: Private
+    private typealias Ends = ListEnds<ListNode>
 
     /// Initializes a new node with `value` and `next`.
     private init(_ value: T, _ next: ListNode?) {
@@ -96,16 +97,16 @@ extension ListNode : SequenceType {
 
 extension ListNode {
     /// Maps values in self with `transform` to create a new list.
-    internal func map<U>(transform: T -> U) -> ListEnds<U> {
-        return reduce(ListEnds<U>()) { (var ends, node) in
+    internal func map<U>(transform: T -> U) -> ListEnds<ListNode<U>> {
+        return reduce(ListEnds<ListNode<U>>()) { (var ends, node) in
             ends.append(transform(node.value))
             return ends
         }
     }
 
     /// Filters values in self with `predicate` to create a new list.
-    internal func filter(predicate: T -> Bool) -> ListEnds<T> {
-        return self.reduce(ListEnds<T>()) { (var ends, node) in
+    internal func filter(predicate: T -> Bool) -> Ends {
+        return self.reduce(Ends()) { (var ends, node) in
             if predicate(node.value) {
                 ends.append(node.value)
             }
@@ -114,17 +115,17 @@ extension ListNode {
     }
 
     /// Takes values up to `tail` to create a new list.
-    internal func takeUntil(tail: ListNode?) -> ListEnds<T> {
-        return takeWhile(ListEnds<T>()) { $0 != tail }
+    internal func takeUntil(tail: ListNode?) -> Ends {
+        return takeWhile(Ends()) { $0 != tail }
     }
 
     /// Takes values while `predicate` returns true to create a new list.
-    internal func takeWhile(predicate: ListNode -> Bool) -> ListEnds<T> {
-        return takeWhile(ListEnds<T>(), predicate)
+    internal func takeWhile(predicate: ListNode -> Bool) -> Ends {
+        return takeWhile(Ends(), predicate)
     }
 
     /// Takes values while `predicate` returns true to create a new list.
-    private func takeWhile(var ends: ListEnds<T>, _ predicate: ListNode -> Bool) -> ListEnds<T> {
+    private func takeWhile(var ends: Ends, _ predicate: ListNode -> Bool) -> Ends {
         if !predicate(self) {
             return ends
         }
@@ -151,20 +152,3 @@ internal func == <T> (lhs: ListNode<T>, rhs: ListNode<T>) -> Bool {
     return lhs === rhs
 }
 
-// MARK: ListEnds
-
-/// Wrapper for the `head` and `tail` of list nodes. Generally used as an accumulator when mapping, filter, etc.
-internal struct ListEnds<T> {
-    internal var head: ListNode<T>?
-    internal var tail: ListNode<T>?
-
-    /// Appends a new `value` to the current `tail` and updates it.
-    internal mutating func append(value: T) {
-        if let node = tail?.insertAfter(value) {
-            tail = node
-        } else {
-            head = ListNode<T>(value)
-            tail = head
-        }
-    }
-}
