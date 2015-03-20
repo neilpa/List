@@ -14,9 +14,6 @@ internal protocol NodeType {
     /// The remainder of the list nodes.
     var next: Self? { get set }
 
-    /// Prefixes the receiver with a new value returning the created node. Next and/or previous nodes are updated as expected.
-    func insertBefore(value: Value) -> Self
-
     /// Appends the receiver with a new value returning the created node. Next and/or previous nodes are updated as expected.
-    func insertAfter(value: Value) -> Self
+    mutating func insertAfter(value: Value) -> Self
 }
