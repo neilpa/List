@@ -1,6 +1,6 @@
 //  Copyright (c) 2015 Neil Pankey. All rights reserved.
 
-/// Generic, singly-linked list of nodes. The basis for `ForwardList` and other higher level collections.
+/// The nodes of a `ForwardList`.
 internal final class ForwardListNode<T> : NodeType {
     // MARK: Constructors
 
