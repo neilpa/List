@@ -13,25 +13,25 @@ final class ListTests: XCTestCase {
         assertEmpty(List<Int>())
     }
 
-    func testPrepend() {
+    func testInsertFirst() {
         var list: List<Int> = List()
 
-        list.prepend(1)
+        list.insertFirst(1)
         assert(list, ==, [1])
 
-        list.prepend(2)
-        list.prepend(3)
+        list.insertFirst(2)
+        list.insertFirst(3)
         assert(list, ==, [3, 2, 1])
     }
 
-    func testAppend() {
+    func testInsertLast() {
         var list: List<Int> = List()
 
-        list.append(1)
+        list.insertLast(1)
         assert(list, ==, [1])
 
-        list.append(2)
-        list.append(3)
+        list.insertLast(2)
+        list.insertLast(3)
         assert(list, ==, [1, 2, 3])
     }
 
@@ -41,10 +41,10 @@ final class ListTests: XCTestCase {
         assert(List(value: "hi"), ==, ["hi"])
 
         var list = List(value: 1)
-        list.append(2)
+        list.insertLast(2)
         assert(list, ==, [1, 2])
 
-        list.prepend(3)
+        list.insertFirst(3)
         assert(list, ==, [3, 1, 2])
     }
 
@@ -58,10 +58,10 @@ final class ListTests: XCTestCase {
         list = [1, 2, 3]
         assert(list, ==, [1, 2, 3])
 
-        list.prepend(0)
+        list.insertFirst(0)
         assert(list, ==, [0, 1, 2, 3])
 
-        list.append(4)
+        list.insertLast(4)
         assert(list, ==, [0, 1, 2, 3, 4])
     }
 
@@ -115,19 +115,19 @@ final class ListTests: XCTestCase {
         let index = list.startIndex.successor()
         var slice = list[index...index.successor()]
 
-        list.prepend(0)
+        list.insertFirst(0)
         assert([2, 3], ==, slice)
         assert([0, 1, 2, 3, 4], ==, list)
 
-        list.append(5)
+        list.insertLast(5)
         assert([2, 3], ==, slice)
         assert([0, 1, 2, 3, 4, 5], ==, list)
 
-        slice.append(6)
+        slice.insertLast(6)
         assert([2, 3, 6], ==, slice)
         assert([0, 1, 2, 3, 4, 5], ==, list)
 
-        slice.prepend(-1)
+        slice.insertFirst(-1)
         assert([-1, 2, 3, 6], ==, slice)
         assert([0, 1, 2, 3, 4, 5], ==, list)
     }

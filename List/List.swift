@@ -21,37 +21,6 @@ public struct List<T> {
         self.init(Node.create(values))
     }
 
-    // MARK: Properties
-
-    /// Returns true iff `List` is empty.
-    public var isEmpty: Bool {
-        return head == nil
-    }
-
-    /// Returns the value at the head of `List`, `nil` if empty.
-    public var first: T? {
-        return head?.value
-    }
-
-    /// Returns the value at the tail of `List`, `nil` if empty.
-    public var last: T? {
-        return tail?.value
-    }
-
-    /// MARK: Operations
-
-    /// Inserts a new `value` before the `first` value.
-    public mutating func prepend(value: T) {
-        insertNode(nil, Node(value), head)
-    }
-
-    /// Inserts a new `value` after the `last` value.
-    public mutating func append(value: T) {
-        insertNode(tail, Node(value), nil)
-    }
-
-    // MARK: Private
-
     /// Initializes `List` with `head`.
     private init(_ head: Node?) {
         self.init(head, head?.last)
@@ -67,6 +36,8 @@ public struct List<T> {
         self.head = head
         self.tail = tail
     }
+
+    // MARK: Primitive operations
 
     /// Replace nodes at the given insertion point
     private mutating func spliceList(prefixTail: Node?, _ replacementHead: Node?, _ replacementTail: Node?, _ suffixHead: Node?) {
@@ -117,19 +88,34 @@ public struct List<T> {
 extension List : QueueType, StackType {
     public typealias Element = T
 
+    /// Returns true iff `List` is empty.
+    public var isEmpty: Bool {
+        return head == nil
+    }
+
+    /// Returns the value at the head of `List`, `nil` if empty.
+    public var first: T? {
+        return head?.value
+    }
+
+    /// Returns the value at the tail of `List`, `nil` if empty.
+    public var last: T? {
+        return tail?.value
+    }
+    
     /// Removes the `first` value at the head of `List` and returns it, `nil` if empty.
     public mutating func removeFirst() -> T {
         return removeNode(head!, previous: nil)
     }
 
-    /// Inserts a new `value` before the `first` value.
+    /// Inserts a new `value` _before_ the `first` value.
     public mutating func insertFirst(value: T) {
-        prepend(value)
+        insertNode(nil, Node(value), head)
     }
 
-    /// Inserts a new `value` after the `last` value.
+    /// Inserts a new `value` _after_ the `last` value.
     public mutating func insertLast(value: T) {
-        append(value)
+        insertNode(tail, Node(value), nil)
     }
 }
 
@@ -205,9 +191,14 @@ extension List : ExtensibleCollectionType {
     public mutating func reserveCapacity(amount: Index.Distance) {
     }
 
-    /// Appends multiple elements to the end of `Queue`.
+    /// Appends `value to the end of `List`.
+    public mutating func append(value: T) {
+        self.insertLast(value)
+    }
+
+    /// Appends multiple elements to the end of `List`.
     public mutating func extend<S: SequenceType where S.Generator.Element == T>(values: S) {
-        Swift.map(values) { self.append($0) }
+        Swift.map(values) { self.insertLast($0) }
     }
 }
 
