@@ -1,7 +1,7 @@
 //  Copyright (c) 2015 Neil Pankey. All rights reserved.
 
 /// Generic, singly-linked list of nodes. The basis for `List` and other higher level collections.
-internal final class ListNode<T> {
+internal final class ListNode<T> : NodeType {
     // MARK: Constructors
 
     /// Initialize a new node with `value` and no tail.
